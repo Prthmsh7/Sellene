@@ -1,0 +1,2 @@
+for page transitions - https://tympanus.net/Sketches/022-svg-path-page-transition-horizontal/
+
