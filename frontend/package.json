@@ -16,6 +16,8 @@
     "@emotion/styled": "^11.11.0",
     "@fontsource/inter": "^5.2.5",
     "@fontsource/space-grotesk": "^5.2.8",
+    "@nivo/line": "^0.99.0",
+    "@nivo/pie": "^0.99.0",
     "framer-motion": "^10.18.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",

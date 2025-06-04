@@ -1,10 +1,27 @@
-import { Box, Button, HStack, Icon, Text, Avatar, Menu, MenuButton, MenuList, MenuItem } from '@chakra-ui/react'
-import { Link as RouterLink } from 'react-router-dom'
-import { FaRocket, FaChartLine, FaPlus, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa'
+import { Box, Button, HStack, Icon, Text, Avatar, Menu, MenuButton, MenuList, MenuItem, useColorModeValue } from '@chakra-ui/react'
+import { Link as RouterLink, useLocation } from 'react-router-dom'
+import { FaRocket, FaChartLine, FaShoppingCart, FaUsers } from 'react-icons/fa'
 
 const Navbar = () => {
+  const location = useLocation()
+  const isDashboard = location.pathname.startsWith('/dashboard')
+  const bgColor = useColorModeValue('brand.black', 'brand.black')
+  const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
+
   return (
-    <Box bg="brand.black" px={4} py={4} borderBottom="1px" borderColor="brand.lightGray">
+    <Box 
+      bg={bgColor} 
+      px={4} 
+      py={4} 
+      borderBottom="1px" 
+      borderColor={borderColor}
+      position={isDashboard ? "fixed" : "relative"}
+      top={0}
+      left={0}
+      right={0}
+      zIndex={3}
+      w="100%"
+    >
       <HStack maxW="1200px" mx="auto" justify="space-between">
         <HStack spacing={8}>
           <RouterLink to="/">
@@ -16,40 +33,39 @@ const Navbar = () => {
             </HStack>
           </RouterLink>
           <HStack spacing={4}>
-            <Button as={RouterLink} to="/about" variant="ghost" color="white">
-              About
+            <Button 
+              as={RouterLink} 
+              to="/dashboard" 
+              variant="ghost" 
+              color="white" 
+              leftIcon={<FaChartLine />}
+              isActive={isDashboard}
+              _active={{ bg: 'brand.darkGray' }}
+            >
+              Dashboard
             </Button>
-            <Button as={RouterLink} to="/creator" variant="ghost" color="white" leftIcon={<FaPlus />}>
-              Create
+            <Button 
+              as={RouterLink} 
+              to="/products" 
+              variant="ghost" 
+              color="white" 
+              leftIcon={<FaShoppingCart />}
+            >
+              Products
             </Button>
-            <Button as={RouterLink} to="/investor" variant="ghost" color="white" leftIcon={<FaChartLine />}>
-              Invest
-            </Button>
-            <Button as={RouterLink} to="/studio" variant="ghost" color="white" leftIcon={<FaRocket />}>
-              Studio
+            <Button 
+              as={RouterLink} 
+              to="/customers" 
+              variant="ghost" 
+              color="white" 
+              leftIcon={<FaUsers />}
+            >
+              Customers
             </Button>
           </HStack>
         </HStack>
 
-        <Menu>
-          <MenuButton>
-            <Avatar size="sm" name="User" />
-          </MenuButton>
-          <MenuList bg="brand.darkGray" borderColor="brand.lightGray">
-            <MenuItem as={RouterLink} to="/profile" icon={<FaUser />} bg="brand.darkGray" _hover={{ bg: 'brand.black' }}>
-              Profile
-            </MenuItem>
-            <MenuItem as={RouterLink} to="/studio" icon={<FaRocket />} bg="brand.darkGray" _hover={{ bg: 'brand.black' }}>
-              Studio
-            </MenuItem>
-            <MenuItem as={RouterLink} to="/settings" icon={<FaCog />} bg="brand.darkGray" _hover={{ bg: 'brand.black' }}>
-              Settings
-            </MenuItem>
-            <MenuItem icon={<FaSignOutAlt />} bg="brand.darkGray" _hover={{ bg: 'brand.black' }}>
-              Sign Out
-            </MenuItem>
-          </MenuList>
-        </Menu>
+        <Avatar size="sm" name="User" />
       </HStack>
     </Box>
   )
