@@ -1,2 +1,4 @@
 for page transitions - https://tympanus.net/Sketches/022-svg-path-page-transition-horizontal/
 
+possible card transitions :
+1. https://tympanus.net/Development/RepeatingImageTransition/
