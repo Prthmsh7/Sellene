@@ -1,4 +1,22 @@
-for page transitions - https://tympanus.net/Sketches/022-svg-path-page-transition-horizontal/
+for page transitions - 
+1. https://tympanus.net/Sketches/022-svg-path-page-transition-horizontal/
+2. https://tympanus.net/Sketches/021-svg-path-page-transition-vertical/
+
 
 possible card transitions :
 1. https://tympanus.net/Development/RepeatingImageTransition/
+
+
+manual cursor - 
+1. https://tympanus.net/Sketches/012-custom-cursor-two-circles/#
+2. https://tympanus.net/Sketches/017-custom-cursor-filter-5/
+3. https://tympanus.net/Sketches/016-custom-cursor-filter-4/
+4. https://tympanus.net/Sketches/012-custom-cursor-two-circles/
+5. https://tympanus.net/Sketches/011-custom-cursor-filled-circle/
+
+gallery - 
+for sure - 
+https://tympanus.net/Development/3DGridContentPreview/
+
+Credits-Developers-Page : 
+https://tympanus.net/Tutorials/MarqueeMenu/
