@@ -60,28 +60,6 @@
    Create fashion collections that are profound expressions of your identity, your persona, your signal. Think beyond fleeting trends.  
    - **Prize:** $1,000 worth of StudioAI credits  
    - **Link:** [Juxtamode Testnet](https://testnet.juxtamode.com/)
-
-### That’s Not Priority
-1. **Gelato**  
-   Integrate Gelato Services that are on Story: VRF, Functions, or Relay.  
-   - **Prize:** 3,000,000 Gelato Units
-
-2. **Crossmint**  
-   AI Agent Track: Use Crossmint's APIs and Storykit for seamless Web3 integration and NFT management.  
-   - **Prize:** $1,500 in premium feature credits
-
-3. **thirdweb**  
-   Build consumer apps, either mobile-native or integrating AI functionalities using thirdweb.  
-   - **Prize:** 30-day free trial worth $100 usage credits (3 months of thirdweb credits)
-
-4. **Holoworld**  
-   Build an AI agent with a unique persona and capabilities using Holoworld's no-code platform.  
-   - **Prize:** $10,000 worth of credits & support turning your agent IP into a 3D model
-
-5. **Zapper**  
-   Zapper API gives you access to all the on-chain data you need to build your next project! Don’t set up indexing or parsing infrastructure — just query ready-to-use endpoints.  
-   - **Prize:** $2,000 worth of API credits + 10,000 free API credits for all participants
-
 -
 
 # IDEA
