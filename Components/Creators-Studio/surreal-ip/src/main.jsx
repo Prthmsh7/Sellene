@@ -1,25 +1,30 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
 import App from './App'
-import { WagmiConfig } from 'wagmi'
+import { WagmiConfig, createConfig, http } from 'wagmi'
 import { sepolia } from 'wagmi/chains'
-import { createWeb3Modal, defaultWagmiConfig } from '@web3modal/wagmi/react'
+import { createWeb3Modal } from '@web3modal/wagmi/react'
 
-// 1. Get a Project ID from https://cloud.walletconnect.com/
-const projectId = '50969e09f4f0f7b1e7b0c549efac3e34'
+const projectId = 'YOUR_PROJECT_ID'
 
-// 2. Create wagmiConfig
 const metadata = {
   name: 'Surreal IP Registry',
   description: 'Surreal IP Registry dApp',
   url: 'http://localhost:5173',
-  icons: ['https://avatars.githubusercontent.com/u/37784886'] // Replace with your app icon url
+  icons: ['https://avatars.githubusercontent.com/u/37784886']
 }
 
 const chains = [sepolia]
-const wagmiConfig = defaultWagmiConfig({ chains, projectId, metadata })
+const sepoliaRpcUrl = 'https://sepolia.infura.io/v3/be30aa58a76d49c4a3c9a06d303e486d'
 
-// 3. Create modal
+const wagmiConfig = createConfig({
+  chains,
+  transports: {
+    [sepolia.id]: http(sepoliaRpcUrl)
+  },
+  ssr: false,
+})
+
 createWeb3Modal({
   wagmiConfig,
   projectId,
