@@ -81,7 +81,7 @@ const Developers = () => {
                   w="full"
                   fontSize="sm"
                 >
-                  npm install @articuno/sdk
+                  npm install @sellene/sdk
                 </Code>
                 <Text color="brand.lightGray">
                   Initialize the SDK with your API key to get started
@@ -94,7 +94,7 @@ const Developers = () => {
                   w="full"
                   fontSize="sm"
                 >
-                  {`const articuno = new ArticunoSDK({
+                  {`const sellene = new SelleneSDK({
   apiKey: 'your-api-key',
   environment: 'production'
 });`}
