@@ -28,10 +28,12 @@ import {
   InputRightElement,
   Flex,
   Container,
+  Image,
 } from '@chakra-ui/react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
 import { FaSearch, FaBars, FaUserCircle, FaBell, FaCog, FaTimes } from 'react-icons/fa'
 import { useState, useRef } from 'react'
+import selleneLogo from '../assets/Sellene-logo-light.png'
 
 const Navbar = () => {
   const location = useLocation()
@@ -109,15 +111,18 @@ const Navbar = () => {
           {/* Left Section - Logo */}
           <Box flex="0 0 auto">
             <RouterLink to="/">
-              <Text
-                fontSize="2xl"
-                fontWeight="bold"
-                color="white"
-                fontFamily="heading"
-                letterSpacing="tight"
-              >
-                ARTICUNO
-              </Text>
+              <HStack spacing={2}>
+                <Image src={selleneLogo} h="60px" alt="Sellene Logo" />
+                <Text
+                  fontSize="2xl"
+                  fontWeight="bold"
+                  color="white"
+                  fontFamily="heading"
+                  letterSpacing="tight"
+                >
+                  Sellene
+                </Text>
+              </HStack>
             </RouterLink>
           </Box>
 

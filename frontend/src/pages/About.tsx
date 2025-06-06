@@ -20,7 +20,7 @@ const About = () => {
             >
               <Icon as={FaRocket} w={12} h={12} color="brand.blue" mb={4} />
               <Heading size="2xl" mb={6} color="white" fontFamily="heading">
-                About ARTICUNO
+                About Sellene
               </Heading>
               <Text fontSize="xl" color="brand.lightGray" maxW="800px" mx="auto" mb={8}>
                 We're revolutionizing how creative works are valued, shared, and monetized through blockchain technology.
@@ -121,7 +121,7 @@ const About = () => {
         {/* Features Section */}
         <Container maxW="1200px" mb={16}>
           <Heading size="xl" mb={12} textAlign="center" color="white" fontFamily="heading">
-            Why Choose ARTICUNO?
+            Why Choose Sellene?
           </Heading>
           <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10}>
             <FeatureCard
@@ -200,7 +200,7 @@ const About = () => {
                 Ready to Get Started?
               </Heading>
               <Text fontSize="lg" color="brand.lightGray" maxW="600px">
-                Join thousands of creators and investors who are already using ARTICUNO to tokenize and trade creative works.
+                Join thousands of creators and investors who are already using Sellene to tokenize and trade creative works.
               </Text>
               <HStack spacing={4}>
                 <Button
