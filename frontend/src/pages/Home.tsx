@@ -5,7 +5,6 @@ import {
   Flex,
   Heading,
   Icon,
-  Image,
   Stack,
   Text,
   useColorModeValue,
@@ -41,12 +40,12 @@ const Home = () => {
         <Box py={20} bg="brand.darkerGray">
           <Container maxW="1200px">
             <Flex
-              direction={{ base: 'column', md: 'row' }}
+              direction="column"
               align="center"
-              justify="space-between"
+              justify="center"
               gap={8}
             >
-              <VStack align={{ base: 'center', md: 'start' }} spacing={6} flex={1}>
+              <VStack align="center" spacing={6} flex={1} maxW="800px">
                 <MotionBox
                   initial={{ opacity: 0, y: 20 }}
                   animate={{ opacity: 1, y: 0 }}
@@ -56,53 +55,55 @@ const Home = () => {
                     size="2xl"
                     color="white"
                     fontFamily="heading"
-                    textAlign={{ base: 'center', md: 'left' }}
+                    textAlign="center"
+                    fontSize={{ base: "4xl", md: "6xl" }}
+                    lineHeight="1.2"
                   >
-                    Tokenize Your Creative Work
+                    Welcome to Sillycon
                   </Heading>
                   <Text
                     fontSize="xl"
                     color="brand.lightGray"
                     mt={4}
-                    textAlign={{ base: 'center', md: 'left' }}
+                    textAlign="center"
+                    maxW="600px"
+                    mx="auto"
                   >
-                    Transform your intellectual property into tradeable assets
+                    A platform for developers, by developers. Join our community of innovators and creators.
                   </Text>
                 </MotionBox>
-                <HStack spacing={4} justify={{ base: 'center', md: 'start' }}>
+                <HStack spacing={4} justify="center">
                   <Button
                     as={RouterLink}
                     to="/dashboard"
                     colorScheme="blue"
                     size="lg"
                     leftIcon={<FaRocket />}
+                    px={8}
+                    py={6}
+                    fontSize="lg"
                   >
                     Get Started
                   </Button>
                   <Button
                     as={RouterLink}
-                    to="/dashboard"
+                    to="/about"
                     variant="outline"
                     size="lg"
                     leftIcon={<FaChartLine />}
+                    px={8}
+                    py={6}
+                    fontSize="lg"
+                    _hover={{
+                      bg: "brand.blue",
+                      color: "white",
+                      borderColor: "brand.blue"
+                    }}
                   >
                     Learn More
                   </Button>
                 </HStack>
               </VStack>
-              <MotionBox
-                flex={1}
-                initial={{ opacity: 0, scale: 0.9 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ duration: 0.5 }}
-              >
-                <Image
-                  src="https://images.unsplash.com/photo-1639762681057-408e52192e55?w=800&auto=format&fit=crop&q=60"
-                  alt="Digital Art"
-                  rounded="lg"
-                  shadow="2xl"
-                />
-              </MotionBox>
             </Flex>
           </Container>
         </Box>
@@ -112,27 +113,27 @@ const Home = () => {
           <Container maxW="1200px">
             <VStack spacing={12}>
               <VStack spacing={4} textAlign="center">
-                <Heading color="white" fontFamily="heading">Why Choose Us</Heading>
-                <Text color="brand.lightGray" maxW="600px">
-                  Our platform offers unique features to help creators and investors succeed
+                <Heading color="white" fontFamily="heading" fontSize={{ base: "3xl", md: "4xl" }}>Why Choose Sillycon</Heading>
+                <Text color="brand.lightGray" maxW="600px" fontSize="lg">
+                  Our platform offers unique features to help developers and creators succeed
                 </Text>
               </VStack>
 
               <SimpleGrid columns={{ base: 1, md: 3 }} spacing={10} w="full">
                 <Feature
                   icon={FaLock}
-                  title="Secure IP Protection"
-                  text="Your intellectual property is protected with state-of-the-art security measures"
+                  title="Secure Development"
+                  text="Your code and projects are protected with state-of-the-art security measures"
                 />
                 <Feature
                   icon={FaExchangeAlt}
-                  title="Easy Trading"
-                  text="Trade your tokenized assets seamlessly on our platform"
+                  title="Easy Collaboration"
+                  text="Work seamlessly with other developers on our platform"
                 />
                 <Feature
                   icon={FaUsers}
                   title="Growing Community"
-                  text="Join a vibrant community of creators and investors"
+                  text="Join a vibrant community of developers and innovators"
                 />
               </SimpleGrid>
             </VStack>
@@ -143,9 +144,9 @@ const Home = () => {
         <Box py={20} bg="brand.darkerGray">
           <Container maxW="1200px">
             <VStack spacing={8} textAlign="center">
-              <Heading color="white" fontFamily="heading">Ready to Get Started?</Heading>
-              <Text color="brand.lightGray" maxW="600px">
-                Join our platform today and start tokenizing your creative work
+              <Heading color="white" fontFamily="heading" fontSize={{ base: "3xl", md: "4xl" }}>Ready to Join?</Heading>
+              <Text color="brand.lightGray" maxW="600px" fontSize="lg">
+                Start your journey with Sillycon today and be part of our growing community
               </Text>
               <Button
                 as={RouterLink}
@@ -153,6 +154,9 @@ const Home = () => {
                 colorScheme="blue"
                 size="lg"
                 leftIcon={<FaRocket />}
+                px={8}
+                py={6}
+                fontSize="lg"
               >
                 Launch Dashboard
               </Button>
