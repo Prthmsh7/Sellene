@@ -1,4 +1,3 @@
-<<<<<<< tomo-story
 # Sellene
 
 ## Key Stuff
@@ -184,4 +183,3 @@ On the front page, you'll see two main areas: one for creators and one for inves
 
 In short, we're building a platform that makes it easy for creators to get paid fairly and for anyone to own a part of creative works. It's like a stock market—but instead of trading company shares, you're trading tiny pieces of art, music, or other intellectual property.
 
->>>>>>> main
