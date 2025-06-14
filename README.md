@@ -56,11 +56,6 @@
    - **Prize:** $1,500  
    - **Link:** [Gaia Documentation](https://www.gaianet.ai/)
 
-7. **JUXTAMODE**  
-   Create fashion collections that are profound expressions of your identity, your persona, your signal. Think beyond fleeting trends.  
-   - **Prize:** $1,000 worth of StudioAI credits  
-   - **Link:** [Juxtamode Testnet](https://testnet.juxtamode.com/)
-
 # IDEA
 
 Imagine a website where artists, musicians, writers, or inventors can turn pieces of their work—like a song, a painting, or a patent—into tiny "shares" that anyone can buy. Here's how it works in plain terms:
