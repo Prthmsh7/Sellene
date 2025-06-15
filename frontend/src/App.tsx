@@ -73,7 +73,8 @@ function App() {
 
                         {/* Dashboard Routes */}
                         <Route path="/dashboard" element={<DashboardLayout />}>
-                          <Route index element={<Overview />} />
+                          <Route index element={<Navigate to="/dashboard/overview" replace />} />
+                          <Route path="overview" element={<Overview />} />
                           <Route path="geography" element={<Geography />} />
                           <Route path="monthly" element={<Monthly />} />
                           <Route path="breakdown" element={<Breakdown />} />

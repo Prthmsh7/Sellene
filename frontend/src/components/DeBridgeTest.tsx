@@ -12,6 +12,7 @@ import {
   Text,
   useToast,
   Heading,
+  useColorModeValue,
 } from '@chakra-ui/react';
 
 export function DeBridgeTest() {
@@ -20,6 +21,14 @@ export function DeBridgeTest() {
   const [amount, setAmount] = useState('');
   const [targetChain, setTargetChain] = useState('');
   const toast = useToast();
+
+  // Color mode values
+  const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray');
+  const textColor = useColorModeValue('white', 'white');
+  const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray');
+  const inputBgColor = useColorModeValue('brand.darkGray', 'brand.darkGray');
+  const inputTextColor = useColorModeValue('white', 'white');
+  const placeholderColor = useColorModeValue('brand.lightGray', 'brand.lightGray');
 
   const handleTransfer = async () => {
     if (!address) {
@@ -63,26 +72,44 @@ export function DeBridgeTest() {
   };
 
   return (
-    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
-      <VStack spacing={4} align="stretch">
-        <Heading size="md">Test DeBridge Integration</Heading>
+    <Box 
+      p={8} 
+      bg={bgColor} 
+      borderRadius="xl" 
+      borderWidth="1px" 
+      borderColor={borderColor}
+      shadow="lg"
+    >
+      <VStack spacing={6} align="stretch">
+        <Heading size="lg" color={textColor}>Test DeBridge Integration</Heading>
         
         <FormControl>
-          <FormLabel>Amount (ETH)</FormLabel>
+          <FormLabel color={textColor}>Amount (ETH)</FormLabel>
           <Input
             type="number"
             value={amount}
             onChange={(e) => setAmount(e.target.value)}
             placeholder="Enter amount"
+            bg={inputBgColor}
+            color={inputTextColor}
+            borderColor={borderColor}
+            _placeholder={{ color: placeholderColor }}
+            _hover={{ borderColor: 'brand.blue' }}
+            _focus={{ borderColor: 'brand.blue', boxShadow: '0 0 0 1px var(--chakra-colors-brand-blue)' }}
           />
         </FormControl>
 
         <FormControl>
-          <FormLabel>Target Chain</FormLabel>
+          <FormLabel color={textColor}>Target Chain</FormLabel>
           <Select
             value={targetChain}
             onChange={(e) => setTargetChain(e.target.value)}
             placeholder="Select target chain"
+            bg={inputBgColor}
+            color={inputTextColor}
+            borderColor={borderColor}
+            _hover={{ borderColor: 'brand.blue' }}
+            _focus={{ borderColor: 'brand.blue', boxShadow: '0 0 0 1px var(--chakra-colors-brand-blue)' }}
           >
             <option value={CHAIN_IDS.ETHEREUM.toString()}>Ethereum</option>
             <option value={CHAIN_IDS.POLYGON.toString()}>Polygon</option>
@@ -96,12 +123,15 @@ export function DeBridgeTest() {
           onClick={handleTransfer}
           isLoading={loading}
           loadingText="Processing..."
+          size="lg"
+          _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
+          transition="all 0.2s"
         >
           Send Tokens
         </Button>
 
         {error && (
-          <Text color="red.500">
+          <Text color="red.400" fontSize="sm">
             Error: {error}
           </Text>
         )}
