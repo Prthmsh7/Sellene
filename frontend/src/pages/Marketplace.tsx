@@ -35,30 +35,34 @@ import {
   Select,
   InputGroup,
   InputLeftElement,
-  Menu,
-  MenuButton,
-  MenuList,
-  MenuItem,
+  Drawer,
+  DrawerBody,
+  DrawerHeader,
+  DrawerOverlay,
+  DrawerContent,
+  DrawerCloseButton,
   Divider,
   Tag,
   TagLabel,
   TagCloseButton,
   Wrap,
   WrapItem,
+  Switch,
+  FormControl,
+  FormLabel,
 } from '@chakra-ui/react'
-import { FaEthereum, FaClock, FaFire, FaChartLine, FaUsers, FaLock, FaShare, FaFilter, FaSort, FaSearch } from 'react-icons/fa'
+import { FaEthereum, FaClock, FaFire, FaChartLine, FaUsers, FaLock, FaShare, FaFilter, FaSort, FaSearch, FaTimes } from 'react-icons/fa'
 import AnimatedPage from '../components/AnimatedPage'
 import { useState, memo, useMemo } from 'react'
 
 // Memoized Collection Card
-const CollectionCard = memo(({ collection, onOpen, setSelectedCollection }) => {
+const CollectionCard = memo(({ collection, onOpen }) => {
   const [imageLoaded, setImageLoaded] = useState(false)
   const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray')
   const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
 
   const handleClick = () => {
-    setSelectedCollection(collection)
-    onOpen()
+    onOpen(collection)
   }
 
   return (
@@ -224,7 +228,7 @@ const BuySharesModal = ({ isOpen, onClose, collection }) => {
   )
 }
 
-const FilterBar = ({ filters, setFilters, categories }) => {
+const FilterSidebar = ({ isOpen, onClose, filters, setFilters, categories }) => {
   const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray')
   const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
 
@@ -248,126 +252,210 @@ const FilterBar = ({ filters, setFilters, categories }) => {
   }
 
   return (
-    <VStack spacing={4} align="stretch" w="full">
-      <HStack spacing={4} wrap="wrap">
-        <InputGroup maxW="300px">
-          <InputLeftElement pointerEvents="none">
-            <Icon as={FaSearch} color="brand.lightGray" />
-          </InputLeftElement>
-          <Input
-            placeholder="Search collections..."
-            value={filters.search}
-            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
-            bg={bgColor}
-            borderColor={borderColor}
-            color="white"
-            _placeholder={{ color: 'brand.lightGray' }}
-          />
-        </InputGroup>
+    <Drawer
+      isOpen={isOpen}
+      placement="right"
+      onClose={onClose}
+      size="md"
+    >
+      <DrawerOverlay backdropFilter="blur(10px)" />
+      <DrawerContent bg="rgba(17, 17, 17, 0.8)" backdropFilter="blur(10px)" borderLeft="1px" borderColor={borderColor}>
+        <DrawerHeader borderBottomWidth="1px" borderColor={borderColor}>
+          <HStack justify="space-between">
+            <Heading size="md" color="white">Filters</Heading>
+            <DrawerCloseButton color="white" />
+          </HStack>
+        </DrawerHeader>
 
-        <Menu closeOnSelect={false}>
-          <MenuButton
-            as={Button}
-            leftIcon={<FaFilter />}
-            variant="outline"
-            colorScheme="blue"
-          >
-            Filter
-          </MenuButton>
-          <MenuList bg={bgColor} borderColor={borderColor}>
-            <MenuItem
-              onClick={() => setFilters(prev => ({ ...prev, trending: !prev.trending }))}
-              bg={filters.trending ? 'blue.500' : 'transparent'}
-              color={filters.trending ? 'white' : 'brand.lightGray'}
-            >
-              <HStack>
-                <Icon as={FaFire} />
-                <Text>Trending</Text>
-              </HStack>
-            </MenuItem>
+        <DrawerBody>
+          <VStack spacing={6} align="stretch">
+            {/* Search */}
+            <FormControl>
+              <FormLabel color="white">Search</FormLabel>
+              <InputGroup>
+                <InputLeftElement pointerEvents="none">
+                  <Icon as={FaSearch} color="brand.lightGray" />
+                </InputLeftElement>
+                <Input
+                  placeholder="Search collections..."
+                  value={filters.search}
+                  onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+                  bg={bgColor}
+                  borderColor={borderColor}
+                  color="white"
+                  _placeholder={{ color: 'brand.lightGray' }}
+                />
+              </InputGroup>
+            </FormControl>
+
+            {/* Quick Filters */}
+            <VStack align="stretch" spacing={4}>
+              <Heading size="sm" color="white">Quick Filters</Heading>
+              <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                <FormLabel color="white" mb="0">
+                  <HStack>
+                    <Icon as={FaFire} color="brand.blue" />
+                    <Text>Trending</Text>
+                  </HStack>
+                </FormLabel>
+                <Switch
+                  isChecked={filters.trending}
+                  onChange={(e) => setFilters(prev => ({ ...prev, trending: e.target.checked }))}
+                  colorScheme="blue"
+                />
+              </FormControl>
+              <FormControl display="flex" alignItems="center" justifyContent="space-between">
+                <FormLabel color="white" mb="0">
+                  <HStack>
+                    <Icon as={FaClock} color="brand.blue" />
+                    <Text>New</Text>
+                  </HStack>
+                </FormLabel>
+                <Switch
+                  isChecked={filters.new}
+                  onChange={(e) => setFilters(prev => ({ ...prev, new: e.target.checked }))}
+                  colorScheme="blue"
+                />
+              </FormControl>
+            </VStack>
+
             <Divider borderColor={borderColor} />
-            <MenuItem
-              onClick={() => setFilters(prev => ({ ...prev, new: !prev.new }))}
-              bg={filters.new ? 'blue.500' : 'transparent'}
-              color={filters.new ? 'white' : 'brand.lightGray'}
-            >
-              <HStack>
-                <Icon as={FaClock} />
-                <Text>New</Text>
+
+            {/* Sort Options */}
+            <VStack align="stretch" spacing={4}>
+              <Heading size="sm" color="white">Sort By</Heading>
+              <Select
+                value={filters.sortBy}
+                onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value }))}
+                bg={bgColor}
+                borderColor={borderColor}
+                color="white"
+              >
+                <option value="price_asc">Price: Low to High</option>
+                <option value="price_desc">Price: High to Low</option>
+                <option value="owners_desc">Most Owners</option>
+                <option value="sold_desc">Most Sold</option>
+              </Select>
+            </VStack>
+
+            <Divider borderColor={borderColor} />
+
+            {/* Price Range */}
+            <VStack align="stretch" spacing={4}>
+              <Heading size="sm" color="white">Price Range (ETH)</Heading>
+              <HStack spacing={2}>
+                <NumberInput
+                  min={0}
+                  max={filters.priceRange.max}
+                  value={filters.priceRange.min}
+                  onChange={(value) => handlePriceChange('min', value)}
+                  flex={1}
+                >
+                  <NumberInputField
+                    placeholder="Min"
+                    bg={bgColor}
+                    borderColor={borderColor}
+                    color="white"
+                  />
+                </NumberInput>
+                <Text color="brand.lightGray">to</Text>
+                <NumberInput
+                  min={filters.priceRange.min}
+                  value={filters.priceRange.max}
+                  onChange={(value) => handlePriceChange('max', value)}
+                  flex={1}
+                >
+                  <NumberInputField
+                    placeholder="Max"
+                    bg={bgColor}
+                    borderColor={borderColor}
+                    color="white"
+                  />
+                </NumberInput>
               </HStack>
-            </MenuItem>
-          </MenuList>
-        </Menu>
+            </VStack>
 
-        <Select
-          maxW="200px"
-          value={filters.sortBy}
-          onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value }))}
-          bg={bgColor}
-          borderColor={borderColor}
-          color="white"
-        >
-          <option value="price_asc">Price: Low to High</option>
-          <option value="price_desc">Price: High to Low</option>
-          <option value="owners_desc">Most Owners</option>
-          <option value="sold_desc">Most Sold</option>
-        </Select>
+            <Divider borderColor={borderColor} />
 
-        <HStack spacing={2}>
-          <NumberInput
-            min={0}
-            max={filters.priceRange.max}
-            value={filters.priceRange.min}
-            onChange={(value) => handlePriceChange('min', value)}
-            maxW="120px"
-          >
-            <NumberInputField
-              placeholder="Min ETH"
-              bg={bgColor}
-              borderColor={borderColor}
-              color="white"
-            />
-          </NumberInput>
-          <Text color="brand.lightGray">to</Text>
-          <NumberInput
-            min={filters.priceRange.min}
-            value={filters.priceRange.max}
-            onChange={(value) => handlePriceChange('max', value)}
-            maxW="120px"
-          >
-            <NumberInputField
-              placeholder="Max ETH"
-              bg={bgColor}
-              borderColor={borderColor}
-              color="white"
-            />
-          </NumberInput>
-        </HStack>
-      </HStack>
+            {/* Categories */}
+            <VStack align="stretch" spacing={4}>
+              <Heading size="sm" color="white">Categories</Heading>
+              <Wrap spacing={2}>
+                {categories.map((category) => (
+                  <WrapItem key={category}>
+                    <Tag
+                      size="md"
+                      borderRadius="full"
+                      variant={filters.categories.includes(category) ? "solid" : "outline"}
+                      colorScheme="blue"
+                      cursor="pointer"
+                      onClick={() => handleCategoryToggle(category)}
+                    >
+                      <TagLabel>{category}</TagLabel>
+                      {filters.categories.includes(category) && <TagCloseButton />}
+                    </Tag>
+                  </WrapItem>
+                ))}
+              </Wrap>
+            </VStack>
 
-      <Wrap spacing={2}>
-        {categories.map((category) => (
-          <WrapItem key={category}>
-            <Tag
-              size="md"
-              borderRadius="full"
-              variant={filters.categories.includes(category) ? "solid" : "outline"}
+            {/* Clear Filters */}
+            <Button
+              leftIcon={<FaTimes />}
+              variant="outline"
               colorScheme="blue"
-              cursor="pointer"
-              onClick={() => handleCategoryToggle(category)}
+              onClick={() => setFilters({
+                search: '',
+                trending: false,
+                new: false,
+                sortBy: 'price_asc',
+                priceRange: {
+                  min: 0,
+                  max: 2
+                },
+                categories: []
+              })}
             >
-              <TagLabel>{category}</TagLabel>
-              {filters.categories.includes(category) && <TagCloseButton />}
-            </Tag>
-          </WrapItem>
-        ))}
-      </Wrap>
-    </VStack>
+              Clear All Filters
+            </Button>
+          </VStack>
+        </DrawerBody>
+      </DrawerContent>
+    </Drawer>
+  )
+}
+
+const FilterBar = ({ onOpen }) => {
+  return (
+    <HStack spacing={4} wrap="wrap">
+      <InputGroup maxW="300px">
+        <InputLeftElement pointerEvents="none">
+          <Icon as={FaSearch} color="brand.lightGray" />
+        </InputLeftElement>
+        <Input
+          placeholder="Search collections..."
+          bg="brand.darkerGray"
+          borderColor="brand.lightGray"
+          color="white"
+          _placeholder={{ color: 'brand.lightGray' }}
+        />
+      </InputGroup>
+
+      <Button
+        leftIcon={<FaFilter />}
+        variant="outline"
+        colorScheme="blue"
+        onClick={onOpen}
+      >
+        Filters
+      </Button>
+    </HStack>
   )
 }
 
 const Marketplace = () => {
-  const { isOpen, onOpen, onClose } = useDisclosure()
+  const { isOpen: isFilterOpen, onOpen: onFilterOpen, onClose: onFilterClose } = useDisclosure()
+  const { isOpen: isModalOpen, onOpen: onModalOpen, onClose: onModalClose } = useDisclosure()
   const [selectedCollection, setSelectedCollection] = useState(null)
   const [filters, setFilters] = useState({
     search: '',
@@ -536,6 +624,11 @@ const Marketplace = () => {
       })
   }, [collections, filters])
 
+  const handleCardClick = (collection) => {
+    setSelectedCollection(collection)
+    onModalOpen()
+  }
+
   return (
     <AnimatedPage>
       <Box minH="100vh" bg="brand.darkGray" pt="80px">
@@ -550,11 +643,7 @@ const Marketplace = () => {
             </VStack>
 
             {/* Filters */}
-            <FilterBar 
-              filters={filters} 
-              setFilters={setFilters} 
-              categories={categories}
-            />
+            <FilterBar onOpen={onFilterOpen} />
 
             {/* Featured Collections */}
             <VStack spacing={6} align="stretch">
@@ -569,8 +658,7 @@ const Marketplace = () => {
                   <CollectionCard 
                     key={collection.id} 
                     collection={collection} 
-                    onOpen={onOpen}
-                    setSelectedCollection={setSelectedCollection}
+                    onOpen={handleCardClick}
                   />
                 ))}
               </SimpleGrid>
@@ -579,9 +667,17 @@ const Marketplace = () => {
         </Container>
       </Box>
 
+      <FilterSidebar
+        isOpen={isFilterOpen}
+        onClose={onFilterClose}
+        filters={filters}
+        setFilters={setFilters}
+        categories={categories}
+      />
+
       <BuySharesModal 
-        isOpen={isOpen} 
-        onClose={onClose} 
+        isOpen={isModalOpen} 
+        onClose={onModalClose} 
         collection={selectedCollection}
       />
     </AnimatedPage>
