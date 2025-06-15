@@ -1,80 +1,28 @@
-import { ChakraProvider } from '@chakra-ui/react'
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
-import theme from './theme'
-import { Navbar } from './components/Navbar'
-import Home from './pages/Home'
-import About from './pages/About'
-import DashboardLayout from './components/DashboardLayout'
-import Overview from './pages/Overview'
-import Geography from './pages/Geography'
-import Monthly from './pages/Monthly'
-import Breakdown from './pages/Breakdown'
-import Daily from './pages/Daily'
-import Marketplace from './pages/Marketplace'
-import Developers from './pages/Developers'
-import Profile from './pages/Profile'
-import DeBridgeTestPage from './pages/DeBridgeTestPage'
-import { AuthProvider } from './contexts/AuthContext'
-import { StoryProvider } from './contexts/StoryContext'
-import { StoryIPRegistration } from './components/StoryIPRegistration'
-import { SecureAuth } from './components/SecureAuth'
-import { DeBridgeProvider } from './contexts/DeBridgeContext'
-import { Toaster } from 'react-hot-toast'
-import { WagmiConfig } from 'wagmi'
-import { config } from './config/wagmi'
+import React from 'react';
+import { IPRegistration } from './components/IPRegistration';
+import { StoryProtocolProvider } from '@story-protocol/react-sdk';
+import { STORY_PROTOCOL_CONFIG } from './config/storyProtocol';
+import './App.css';
 
-// Configure React Router future flags
-const router = {
-  future: {
-    v7_startTransition: true,
-    v7_relativeSplatPath: true
-  }
-}
-
-function App() {
+const App = () => {
   return (
-    <ChakraProvider theme={theme}>
-      <WagmiConfig config={config}>
-        <AuthProvider>
-          <StoryProvider>
-            <DeBridgeProvider>
-              <Router future={router.future}>
-                <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900">
-                  <Navbar />
-                  <main className="container mx-auto px-4 py-8">
-                    <Routes>
-                      {/* Public Routes */}
-                      <Route path="/" element={<Home />} />
-                      <Route path="/about" element={<About />} />
-                      <Route path="/marketplace" element={<Marketplace />} />
-                      <Route path="/developers" element={<Developers />} />
-                      <Route path="/profile" element={<Profile />} />
-                      <Route path="/register-ip" element={<StoryIPRegistration />} />
-                      <Route path="/auth" element={<SecureAuth />} />
-                      <Route path="/debridge-test" element={<DeBridgeTestPage />} />
+    <StoryProtocolProvider
+      config={{
+        rpcUrl: STORY_PROTOCOL_CONFIG.rpcUrl,
+        chainId: STORY_PROTOCOL_CONFIG.chainId,
+        apiUrl: import.meta.env.VITE_STORY_API_URL,
+      }}
+    >
+      <div className="app">
+        <header className="app-header">
+          <h1>IP Registration</h1>
+        </header>
+        <main className="app-main">
+          <IPRegistration />
+        </main>
+      </div>
+    </StoryProtocolProvider>
+  );
+};
 
-                      {/* Dashboard Routes */}
-                      <Route path="/dashboard" element={<DashboardLayout />}>
-                        <Route index element={<Overview />} />
-                        <Route path="geography" element={<Geography />} />
-                        <Route path="monthly" element={<Monthly />} />
-                        <Route path="breakdown" element={<Breakdown />} />
-                        <Route path="daily" element={<Daily />} />
-                      </Route>
-
-                      {/* Redirects */}
-                      <Route path="*" element={<Navigate to="/" replace />} />
-                    </Routes>
-                  </main>
-                  <Toaster position="top-right" />
-                </div>
-              </Router>
-            </DeBridgeProvider>
-          </StoryProvider>
-        </AuthProvider>
-      </WagmiConfig>
-    </ChakraProvider>
-  )
-}
-
-export default App
+export default App;

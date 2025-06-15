@@ -99,12 +99,12 @@ const Developers = () => {
                   <HStack spacing={4}>
                     <Button
                       as={RouterLink}
-                      to="/creator"
+                      to="/register-ip"
                       colorScheme="blue"
                       size="lg"
                       leftIcon={<FaRocket />}
                     >
-                      Join as Creator
+                      Start Creating
                     </Button>
                     <Button
                       as={RouterLink}
