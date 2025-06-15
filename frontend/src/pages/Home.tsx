@@ -203,8 +203,35 @@ const Home = () => {
 
                 {/* Right Column - Feature Cards */}
                 <GridItem>
-                  <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                  <Grid 
+                    templateColumns="repeat(2, 1fr)" 
+                    gap={4}
+                    maxH="calc(100vh - 100px)"
+                    overflowY="auto"
+                    sx={{
+                      '&::-webkit-scrollbar': {
+                        width: '4px',
+                      },
+                      '&::-webkit-scrollbar-track': {
+                        width: '6px',
+                      },
+                      '&::-webkit-scrollbar-thumb': {
+                        background: 'brand.blue',
+                        borderRadius: '24px',
+                      },
+                    }}
+                  >
                     {[
+                      {
+                        icon: FaGlobe,
+                        title: "Cross-Chain Trading",
+                        description: "Trade assets across multiple blockchains seamlessly"
+                      },
+                      {
+                        icon: FaLock,
+                        title: "Secure Storage",
+                        description: "Your digital assets are protected with advanced security"
+                      },
                       {
                         icon: FaPalette,
                         title: "Sell Artworks",
@@ -224,6 +251,16 @@ const Home = () => {
                         icon: FaShieldAlt,
                         title: "Secure Rights",
                         description: "Protect your intellectual property rights"
+                      },
+                      {
+                        icon: FaChartLine,
+                        title: "Market Analytics",
+                        description: "Track performance and market trends"
+                      },
+                      {
+                        icon: FaRocket,
+                        title: "Quick Launch",
+                        description: "Start selling your art in minutes"
                       }
                     ].map((feature, index) => (
                       <MotionBox
@@ -231,37 +268,27 @@ const Home = () => {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ duration: 0.5, delay: index * 0.1 }}
+                        bg="brand.darkerGray"
+                        p={4}
+                        borderRadius="xl"
+                        borderWidth="1px"
+                        borderColor="brand.lightGray"
+                        h="140px"
+                        _hover={{
+                          transform: 'translateY(-4px)',
+                          boxShadow: '0 10px 20px rgba(66, 153, 225, 0.2)',
+                          borderColor: 'brand.blue'
+                        }}
+                        transition="all 0.2s"
                       >
-                        <VStack
-                          align="start"
-                          p={5}
-                          bg="whiteAlpha.50"
-                          borderRadius="2xl"
-                          backdropFilter="blur(10px)"
-                          border="1px"
-                          borderColor="whiteAlpha.200"
-                          h="full"
-                          position="relative"
-                          overflow="hidden"
-                          _hover={{
-                            transform: 'translateY(-4px)',
-                            boxShadow: '0 10px 20px rgba(66, 153, 225, 0.2)',
-                          }}
-                          transition="all 0.3s ease"
-                        >
-                          <Circle
-                            size="40px"
-                            bgGradient="linear(to-br, brand.blue, brand.purple)"
-                            position="absolute"
-                            top="-10px"
-                            right="-10px"
-                            opacity="0.1"
-                          />
-                          <Icon as={feature.icon} boxSize={6} color="brand.blue" />
-                          <Text fontSize="lg" fontWeight="bold" color="white">
-                            {feature.title}
-                          </Text>
-                          <Text fontSize="sm" color="brand.lightGray">
+                        <VStack align="start" spacing={2} h="full">
+                          <HStack spacing={2}>
+                            <Icon as={feature.icon} w={5} h={5} color="brand.blue" />
+                            <Text color="white" fontSize="md" fontWeight="bold">
+                              {feature.title}
+                            </Text>
+                          </HStack>
+                          <Text color="brand.lightGray" fontSize="sm" noOfLines={2}>
                             {feature.description}
                           </Text>
                         </VStack>
