@@ -10,11 +10,10 @@ import Geography from './pages/Geography'
 import Monthly from './pages/Monthly'
 import Breakdown from './pages/Breakdown'
 import Daily from './pages/Daily'
-import Gallery from './pages/Gallery'
 import Marketplace from './pages/Marketplace'
 import Developers from './pages/Developers'
-import Studio from './pages/Studio'
 import Profile from './pages/Profile'
+import DeBridgeTestPage from './pages/DeBridgeTestPage'
 import { AuthProvider } from './contexts/AuthContext'
 import { StoryProvider } from './contexts/StoryContext'
 import { StoryIPRegistration } from './components/StoryIPRegistration'
@@ -23,7 +22,6 @@ import { DeBridgeProvider } from './contexts/DeBridgeContext'
 import { Toaster } from 'react-hot-toast'
 import { WagmiConfig } from 'wagmi'
 import { config } from './config/wagmi'
-import { DeBridgeTest } from './components/DeBridgeTest'
 
 // Configure React Router future flags
 const router = {
@@ -48,13 +46,12 @@ function App() {
                       {/* Public Routes */}
                       <Route path="/" element={<Home />} />
                       <Route path="/about" element={<About />} />
-                      <Route path="/gallery" element={<Gallery />} />
                       <Route path="/marketplace" element={<Marketplace />} />
                       <Route path="/developers" element={<Developers />} />
-                      <Route path="/studio" element={<Studio />} />
                       <Route path="/profile" element={<Profile />} />
                       <Route path="/register-ip" element={<StoryIPRegistration />} />
                       <Route path="/auth" element={<SecureAuth />} />
+                      <Route path="/debridge-test" element={<DeBridgeTestPage />} />
 
                       {/* Dashboard Routes */}
                       <Route path="/dashboard" element={<DashboardLayout />}>
@@ -70,7 +67,6 @@ function App() {
                     </Routes>
                   </main>
                   <Toaster position="top-right" />
-                  <DeBridgeTest />
                 </div>
               </Router>
             </DeBridgeProvider>
