@@ -14,6 +14,7 @@ import {
   Flex,
   Circle,
   useToken,
+  useToast,
 } from '@chakra-ui/react'
 import { keyframes } from '@emotion/react'
 import { motion } from 'framer-motion'
@@ -25,10 +26,12 @@ import {
   FaGlobe,
   FaCoins,
   FaUsers,
-  FaLock
+  FaLock,
+  FaRocket,
 } from 'react-icons/fa'
 import AnimatedPage from '../components/AnimatedPage'
 import selleneLogo from '../assets/Sellene-logo-light.png'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 
 const MotionBox = motion(Box)
 
@@ -50,8 +53,24 @@ const rotate = keyframes`
 `
 
 const Home = () => {
+  const navigate = useNavigate()
+  const toast = useToast()
   const bgColor = useColorModeValue('brand.darkGray', 'brand.darkGray')
   const [blue, purple] = useToken('colors', ['brand.blue', 'brand.purple'])
+
+  const handleStartCreating = () => {
+    toast({
+      title: "Connect Wallet",
+      description: "Please connect your wallet to start creating and exploring masterpieces",
+      status: "info",
+      duration: 5000,
+      isClosable: true,
+    })
+  }
+
+  const handleLearnMore = () => {
+    navigate('/about')
+  }
 
   return (
     <AnimatedPage>
@@ -160,38 +179,20 @@ const Home = () => {
 
                       <HStack spacing={6} pt={2}>
                         <Button
-                          as={Link}
-                          href="/dashboard"
-                          rightIcon={<FaArrowRight />}
+                          onClick={handleStartCreating}
+                          colorScheme="blue"
                           size="lg"
+                          leftIcon={<FaRocket />}
                           px={8}
-                          py={5}
-                          fontSize="lg"
-                          fontWeight="bold"
-                          bgGradient="linear(to-r, brand.blue, brand.purple)"
-                          _hover={{
-                            transform: 'translateY(-2px)',
-                            boxShadow: '0 10px 20px rgba(66, 153, 225, 0.3)',
-                            bgGradient: 'linear(to-r, brand.purple, brand.blue)',
-                          }}
-                          transition="all 0.3s ease"
                         >
                           Start Creating
                         </Button>
                         <Button
-                          as={Link}
-                          href="/about"
+                          onClick={handleLearnMore}
                           variant="outline"
                           size="lg"
+                          rightIcon={<FaArrowRight />}
                           px={8}
-                          py={5}
-                          fontSize="lg"
-                          color="white"
-                          borderColor="whiteAlpha.300"
-                          _hover={{
-                            bg: 'whiteAlpha.100',
-                            borderColor: 'whiteAlpha.500',
-                          }}
                         >
                           Learn More
                         </Button>
