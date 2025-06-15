@@ -249,6 +249,72 @@ const Marketplace = () => {
       owners: 120,
       total: 150,
       sold: 30
+    },
+    {
+      id: 4,
+      title: "Neural Networks",
+      description: "AI-generated art exploring the boundaries between human creativity and machine learning.",
+      image: "https://images.unsplash.com/photo-1635070041078-e363dbe005cb?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+      category: "AI Art",
+      price: 0.8,
+      owners: 32,
+      total: 80,
+      sold: 48
+    },
+    {
+      id: 5,
+      title: "Cosmic Journey",
+      description: "Space-themed digital art collection featuring stunning cosmic landscapes and celestial bodies.",
+      image: "https://images.unsplash.com/photo-1614728894747-a83421e2b9c9?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+      category: "Space Art",
+      price: 0.4,
+      owners: 95,
+      total: 120,
+      sold: 25
+    },
+    {
+      id: 6,
+      title: "Digital Portraits",
+      description: "A collection of unique digital portraits blending traditional art techniques with modern technology.",
+      image: "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+      category: "Portraits",
+      price: 0.6,
+      owners: 65,
+      total: 90,
+      sold: 25
+    },
+    {
+      id: 7,
+      title: "Cyberpunk City",
+      description: "Futuristic cityscapes and neon-lit urban environments in a cyberpunk aesthetic.",
+      image: "https://images.unsplash.com/photo-1550751827-4bd374c3f58b?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+      category: "Cyberpunk",
+      price: 0.7,
+      owners: 88,
+      total: 110,
+      sold: 22
+    },
+    {
+      id: 8,
+      title: "Nature's Code",
+      description: "Digital art exploring the mathematical patterns and algorithms found in nature.",
+      image: "https://images.unsplash.com/photo-1618005198919-d3d4b5a92ead?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1074&q=80",
+      category: "Generative",
+      price: 0.45,
+      owners: 72,
+      total: 95,
+      sold: 23
+    },
+    {
+      id: 9,
+      title: "Digital Sculptures",
+      description: "3D digital sculptures pushing the boundaries of form and space in the digital realm.",
+      image: "https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1064&q=80",
+      category: "3D Art",
+      price: 0.9,
+      owners: 42,
+      total: 70,
+      sold: 28
     }
   ]
 
