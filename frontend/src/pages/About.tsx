@@ -13,11 +13,15 @@ import {
   Image,
   useBreakpointValue,
   Badge,
+  useToast,
+  Grid,
+  GridItem,
 } from '@chakra-ui/react'
 import { FaRocket, FaUsers, FaCoins, FaChartLine, FaHandshake, FaLock, FaGlobe, FaShieldAlt, FaPalette, FaLightbulb, FaCheckCircle } from 'react-icons/fa'
-import { Link as RouterLink } from 'react-router-dom'
+import { Link as RouterLink, useNavigate } from 'react-router-dom'
 import { motion } from 'framer-motion'
 import AnimatedPage from '../components/AnimatedPage'
+import { keyframes } from '@emotion/react'
 
 const MotionBox = motion(Box)
 
@@ -25,134 +29,115 @@ const About = () => {
   const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray')
   const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
   const isMobile = useBreakpointValue({ base: true, md: false })
+  const navigate = useNavigate()
+  const toast = useToast()
+
+  const handleArtistClick = async () => {
+    try {
+      // TODO: Implement wallet connection
+      toast({
+        title: "Coming Soon",
+        description: "Wallet connection will be available soon!",
+        status: "info",
+        duration: 5000,
+        isClosable: true,
+      })
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: "Something went wrong. Please try again.",
+        status: "error",
+        duration: 5000,
+        isClosable: true,
+      })
+    }
+  }
+
+  const handleCollectorClick = () => {
+    navigate('/marketplace')
+  }
 
   return (
     <AnimatedPage>
-      <Box minH="100vh" bg="brand.darkGray" pt="80px">
-        <Container maxW="container.xl" py={8}>
-          <VStack spacing={16}>
-            {/* Hero Section */}
-            <MotionBox
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.5 }}
-              textAlign="center"
-              maxW="800px"
-              mx="auto"
-              position="relative"
-            >
-              <Badge
-                position="absolute"
-                top="-4"
-                right="0"
-                colorScheme="blue"
-                px={3}
-                py={1}
-                borderRadius="full"
-                fontSize="sm"
-                fontWeight="medium"
-              >
-                Beta Access Available
-              </Badge>
-              <Icon as={FaLightbulb} w={12} h={12} color="brand.blue" mb={4} />
-              <Heading 
-                size="2xl" 
-                color="white" 
-                fontFamily="heading"
-                lineHeight="1.2"
-                mb={4}
-                bgGradient="linear(to-r, brand.blue, brand.purple)"
-                bgClip="text"
-              >
-                Revolutionizing Digital Art Trading
-              </Heading>
-              <Text 
-                fontSize="lg" 
-                color="brand.lightGray"
-                mb={6}
-                maxW="600px"
-                mx="auto"
-              >
-                We're building the future of digital art trading, where artists and collectors connect in a secure, 
-                transparent, and innovative marketplace powered by blockchain technology.
-              </Text>
-              <HStack spacing={4} justify="center" mb={8}>
-                <Button
-                  as={RouterLink}
-                  to="/creator"
-                  colorScheme="blue"
-                  size="lg"
-                  leftIcon={<FaRocket />}
-                  px={6}
-                  _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
-                  transition="all 0.2s"
-                >
-                  Join as Artist
-                </Button>
-                <Button
-                  as={RouterLink}
-                  to="/investor"
-                  variant="outline"
-                  size="lg"
-                  leftIcon={<FaChartLine />}
-                  px={6}
-                  _hover={{ transform: 'translateY(-2px)', boxShadow: 'lg' }}
-                  transition="all 0.2s"
-                >
-                  Start Collecting
-                </Button>
-              </HStack>
-            </MotionBox>
-
-            {/* Main Content Grid */}
-            <SimpleGrid columns={{ base: 1, md: 2 }} spacing={8} w="full">
-              {/* Left Column */}
-              <VStack spacing={8} align="stretch">
-                {/* Mission Box */}
+      <Box 
+        minH="100vh" 
+        bg="brand.darkGray" 
+        pt={{ base: "100px", md: "120px", lg: "140px" }} 
+        pb={{ base: 4, md: 6, lg: 8 }}
+        position="relative"
+      >
+        <Container maxW="container.xl" h="full">
+          <Grid
+            templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }}
+            gap={{ base: 4, md: 5, lg: 6 }}
+            h="full"
+          >
+            {/* Left Column */}
+            <GridItem>
+              <VStack spacing={{ base: 4, md: 5, lg: 6 }} align="stretch" h="full">
+                {/* Hero Section */}
                 <Box 
-                  bg={bgColor} 
-                  p={6} 
-                  borderRadius="lg" 
-                  border="1px" 
+                  bg={bgColor}
+                  p={{ base: 4, md: 5, lg: 6 }}
+                  borderRadius="lg"
+                  border="1px"
                   borderColor={borderColor}
                   position="relative"
-                  overflow="hidden"
-                  _before={{
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '2px',
-                    background: 'linear-gradient(to right, brand.blue, brand.purple)',
-                  }}
                 >
-                  <Heading size="lg" color="white" mb={4} fontFamily="heading">
-                    Our Mission
-                  </Heading>
-                  <Text fontSize="md" color="brand.lightGray" mb={6}>
-                    We're on a mission to democratize digital art trading by creating a platform that empowers artists 
-                    and collectors alike. Through blockchain technology, we ensure transparency, security, and fair 
-                    compensation for all participants in the digital art ecosystem.
-                  </Text>
-                  <SimpleGrid columns={{ base: 1, md: 2 }} spacing={4}>
-                    <FeatureCard
-                      icon={FaPalette}
-                      title="For Artists"
-                      description="Showcase your digital art, maintain ownership rights, and earn fair compensation."
-                      badge="New"
-                    />
-                    <FeatureCard
-                      icon={FaChartLine}
-                      title="For Collectors"
-                      description="Discover unique digital art pieces and build your collection with confidence."
-                      badge="Popular"
-                    />
-                  </SimpleGrid>
+                  <Badge
+                    position="absolute"
+                    top={{ base: 2, md: 3, lg: 4 }}
+                    right={{ base: 2, md: 3, lg: 4 }}
+                    colorScheme="blue"
+                    px={{ base: 2, md: 3 }}
+                    py={{ base: 0.5, md: 1 }}
+                    borderRadius="full"
+                    fontSize={{ base: "xs", md: "sm" }}
+                    fontWeight="medium"
+                  >
+                    Beta Access Available
+                  </Badge>
+                  <VStack spacing={{ base: 3, md: 4 }} align="start">
+                    <Icon as={FaLightbulb} w={{ base: 8, md: 10 }} h={{ base: 8, md: 10 }} color="brand.blue" />
+                    <Heading 
+                      size={{ base: "lg", md: "xl" }}
+                      color="white" 
+                      fontFamily="heading"
+                      lineHeight="1.2"
+                      bgGradient="linear(to-r, brand.blue, brand.purple)"
+                      bgClip="text"
+                    >
+                      Revolutionizing Digital Art Trading
+                    </Heading>
+                    <Text color="brand.lightGray" fontSize={{ base: "sm", md: "md" }}>
+                      We're building the future of digital art trading, where artists and collectors connect in a secure, 
+                      transparent, and innovative marketplace.
+                    </Text>
+                    <HStack spacing={{ base: 3, md: 4 }}>
+                      <Button
+                        onClick={handleArtistClick}
+                        colorScheme="blue"
+                        size={{ base: "sm", md: "md" }}
+                        leftIcon={<FaRocket />}
+                        px={{ base: 4, md: 6 }}
+                      >
+                        Join as Artist
+                      </Button>
+                      <Button
+                        onClick={handleCollectorClick}
+                        variant="outline"
+                        size={{ base: "sm", md: "md" }}
+                        leftIcon={<FaChartLine />}
+                        px={{ base: 4, md: 6 }}
+                      >
+                        Start Collecting
+                      </Button>
+                    </HStack>
+                  </VStack>
                 </Box>
 
                 {/* Stats Grid */}
-                <SimpleGrid columns={2} spacing={4}>
+                <SimpleGrid columns={2} spacing={{ base: 3, md: 4 }}>
                   <StatCard
                     icon={FaUsers}
                     label="Active Artists"
@@ -183,94 +168,131 @@ const About = () => {
                   />
                 </SimpleGrid>
               </VStack>
+            </GridItem>
 
-              {/* Right Column */}
-              <VStack spacing={8} align="stretch">
-                {/* Values Box */}
+            {/* Right Column */}
+            <GridItem>
+              <VStack spacing={{ base: 4, md: 5, lg: 6 }} align="stretch" h="full">
+                {/* Mission Box */}
                 <Box 
-                  bg={bgColor} 
-                  p={6} 
-                  borderRadius="lg" 
-                  border="1px" 
+                  bg={bgColor}
+                  p={{ base: 4, md: 5, lg: 6 }}
+                  borderRadius="lg"
+                  border="1px"
                   borderColor={borderColor}
-                  position="relative"
-                  overflow="hidden"
-                  _before={{
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '2px',
-                    background: 'linear-gradient(to right, brand.blue, brand.purple)',
-                  }}
                 >
-                  <Heading size="lg" color="white" mb={4} fontFamily="heading">
-                    Our Values
-                  </Heading>
-                  <VStack spacing={4}>
-                    <ValueCard
-                      icon={FaLock}
-                      title="Security First"
-                      description="Every transaction is secured by blockchain technology, ensuring authenticity and ownership."
-                      features={['Smart Contracts', 'Encrypted Data', 'Secure Storage']}
-                    />
-                    <ValueCard
-                      icon={FaGlobe}
-                      title="Global Reach"
-                      description="Connect with artists and collectors worldwide, breaking down geographical barriers."
-                      features={['24/7 Trading', 'Multi-currency', 'Global Network']}
-                    />
-                    <ValueCard
-                      icon={FaHandshake}
-                      title="Fair Trading"
-                      description="Smart contracts ensure artists receive fair compensation through automated royalties."
-                      features={['Automated Royalties', 'Transparent Fees', 'Fair Pricing']}
-                    />
+                  <VStack spacing={{ base: 3, md: 4 }} align="start">
+                    <Heading size={{ base: "md", md: "lg" }} color="white" fontFamily="heading">
+                      Our Mission
+                    </Heading>
+                    <Text color="brand.lightGray" fontSize={{ base: "xs", md: "sm" }}>
+                      We're on a mission to democratize digital art trading by creating a platform that empowers artists 
+                      and collectors alike through blockchain technology.
+                    </Text>
+                    <SimpleGrid columns={2} spacing={{ base: 3, md: 4 }} w="full">
+                      <FeatureCard
+                        icon={FaPalette}
+                        title="For Artists"
+                        description="Showcase your digital art and earn fair compensation."
+                        features={['Smart Contracts', 'Direct Connection', 'Global Market']}
+                        badge="New"
+                      />
+                      <FeatureCard
+                        icon={FaChartLine}
+                        title="For Collectors"
+                        description="Discover and collect unique digital art pieces."
+                        features={['Verified Art', 'Secure Trading', 'Investment']}
+                        badge="Popular"
+                      />
+                    </SimpleGrid>
                   </VStack>
                 </Box>
 
-                {/* Platform Features */}
+                {/* Values Box */}
                 <Box 
-                  bg={bgColor} 
-                  p={6} 
-                  borderRadius="lg" 
-                  border="1px" 
+                  bg={bgColor}
+                  p={{ base: 4, md: 5, lg: 6 }}
+                  borderRadius="lg"
+                  border="1px"
                   borderColor={borderColor}
-                  position="relative"
-                  overflow="hidden"
-                  _before={{
-                    content: '""',
-                    position: 'absolute',
-                    top: 0,
-                    left: 0,
-                    right: 0,
-                    height: '2px',
-                    background: 'linear-gradient(to right, brand.blue, brand.purple)',
-                  }}
                 >
-                  <Heading size="lg" color="white" mb={4} fontFamily="heading">
-                    Platform Features
-                  </Heading>
-                  <VStack spacing={4}>
-                    <FeatureCard
-                      icon={FaShieldAlt}
-                      title="Secure Trading"
-                      description="Advanced security measures protect every transaction and artwork."
-                      features={['End-to-end Encryption', 'Multi-factor Auth', 'Secure Storage']}
-                    />
-                    <FeatureCard
-                      icon={FaGlobe}
-                      title="Global Marketplace"
-                      description="Access a worldwide network of artists and collectors."
-                      features={['Real-time Trading', 'Global Payments', 'Multi-language']}
-                    />
+                  <VStack spacing={{ base: 3, md: 4 }} align="start">
+                    <Heading size={{ base: "md", md: "lg" }} color="white" fontFamily="heading">
+                      Our Values
+                    </Heading>
+                    <SimpleGrid columns={{ base: 2, md: 3 }} spacing={{ base: 3, md: 4 }} w="full">
+                      <ValueCard
+                        icon={FaLock}
+                        title="Security"
+                        description="Blockchain-secured transactions"
+                        features={['Smart Contracts', 'Encryption']}
+                      />
+                      <ValueCard
+                        icon={FaGlobe}
+                        title="Global"
+                        description="Worldwide marketplace"
+                        features={['24/7 Trading', 'Multi-currency']}
+                      />
+                      <ValueCard
+                        icon={FaHandshake}
+                        title="Fair"
+                        description="Automated royalties"
+                        features={['Transparent Fees', 'Fair Pricing']}
+                      />
+                    </SimpleGrid>
                   </VStack>
                 </Box>
               </VStack>
-            </SimpleGrid>
-          </VStack>
+            </GridItem>
+          </Grid>
         </Container>
+
+        {/* Simple Marquee Footer */}
+        <Box
+          position="fixed"
+          bottom="0"
+          left="0"
+          right="0"
+          bg="blackAlpha.900"
+          py={4}
+          zIndex="1000"
+          overflow="hidden"
+          whiteSpace="nowrap"
+          width="100%"
+        >
+          <Box
+            as="div"
+            animation={`${keyframes`
+              from { transform: translateX(0); }
+              to { transform: translateX(-50%); }
+            `} 35s linear infinite`}
+            display="inline-flex"
+            width="max-content"
+          >
+            <Text 
+              color="white" 
+              fontSize="xl" 
+              fontWeight="extrabold" 
+              display="inline-block" 
+              mx={8}
+              letterSpacing="wide"
+              textTransform="uppercase"
+            >
+              TRADE ART • SELL YOUR CREATIONS • BUY UNIQUE PIECES • EARN ROYALTIES • PROTECT YOUR WORK • GLOBAL MARKETPLACE • INSTANT PAYMENTS • SECURE TRANSACTIONS • VERIFIED ARTISTS • EXCLUSIVE COLLECTIONS • DIGITAL GALLERY • ARTIST COMMUNITY • CREATIVE ECONOMY • BLOCKCHAIN ART • FUTURE OF CREATIVITY
+            </Text>
+            <Text 
+              color="white" 
+              fontSize="xl" 
+              fontWeight="extrabold" 
+              display="inline-block" 
+              mx={8}
+              letterSpacing="wide"
+              textTransform="uppercase"
+            >
+              TRADE ART • SELL YOUR CREATIONS • BUY UNIQUE PIECES • EARN ROYALTIES • PROTECT YOUR WORK • GLOBAL MARKETPLACE • INSTANT PAYMENTS • SECURE TRANSACTIONS • VERIFIED ARTISTS • EXCLUSIVE COLLECTIONS • DIGITAL GALLERY • ARTIST COMMUNITY • CREATIVE ECONOMY • BLOCKCHAIN ART • FUTURE OF CREATIVITY
+            </Text>
+          </Box>
+        </Box>
       </Box>
     </AnimatedPage>
   )
@@ -279,15 +301,15 @@ const About = () => {
 const FeatureCard = ({ icon, title, description, badge, features }: { icon: any; title: string; description: string; badge?: string; features?: string[] }) => {
   return (
     <MotionBox
-      whileHover={{ y: -5 }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
       <VStack
-        p={4}
+        p={{ base: 3, md: 4 }}
         bg="brand.darkGray"
         rounded="lg"
         align="start"
-        spacing={3}
+        spacing={{ base: 2, md: 3 }}
         border="1px"
         borderColor="brand.lightGray"
         h="full"
@@ -296,25 +318,26 @@ const FeatureCard = ({ icon, title, description, badge, features }: { icon: any;
         {badge && (
           <Badge
             position="absolute"
-            top={2}
-            right={2}
+            top={{ base: 1, md: 2 }}
+            right={{ base: 1, md: 2 }}
             colorScheme="blue"
             variant="solid"
             borderRadius="full"
-            px={2}
+            px={{ base: 1, md: 2 }}
+            fontSize={{ base: "2xs", md: "xs" }}
           >
             {badge}
           </Badge>
         )}
-        <Icon as={icon} w={8} h={8} color="brand.blue" />
-        <Heading size="sm" color="white" fontFamily="heading">{title}</Heading>
-        <Text color="brand.lightGray" fontSize="sm">{description}</Text>
+        <Icon as={icon} w={{ base: 5, md: 6 }} h={{ base: 5, md: 6 }} color="brand.blue" />
+        <Heading size={{ base: "xs", md: "sm" }} color="white" fontFamily="heading">{title}</Heading>
+        <Text color="brand.lightGray" fontSize={{ base: "2xs", md: "xs" }}>{description}</Text>
         {features && (
-          <VStack align="start" spacing={2} w="full" pt={2}>
+          <VStack align="start" spacing={{ base: 1, md: 2 }} w="full" pt={{ base: 1, md: 2 }}>
             {features.map((feature, index) => (
-              <HStack key={index} spacing={2}>
-                <Icon as={FaCheckCircle} color="brand.blue" w={4} h={4} />
-                <Text color="brand.lightGray" fontSize="xs">{feature}</Text>
+              <HStack key={index} spacing={{ base: 1, md: 2 }}>
+                <Icon as={FaCheckCircle} color="brand.blue" w={{ base: 2, md: 3 }} h={{ base: 2, md: 3 }} />
+                <Text color="brand.lightGray" fontSize={{ base: "2xs", md: "xs" }}>{feature}</Text>
               </HStack>
             ))}
           </VStack>
@@ -327,34 +350,33 @@ const FeatureCard = ({ icon, title, description, badge, features }: { icon: any;
 const ValueCard = ({ icon, title, description, features }: { icon: any; title: string; description: string; features?: string[] }) => {
   return (
     <MotionBox
-      whileHover={{ y: -5 }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
-      <HStack
-        p={4}
+      <VStack
+        p={{ base: 2, md: 3 }}
         bg="brand.darkGray"
         rounded="lg"
-        spacing={4}
+        align="start"
+        spacing={{ base: 1, md: 2 }}
         border="1px"
         borderColor="brand.lightGray"
-        align="start"
+        h="full"
       >
-        <Icon as={icon} w={6} h={6} color="brand.blue" mt={1} />
-        <VStack align="start" spacing={2} flex={1}>
-          <Heading size="sm" color="white" fontFamily="heading">{title}</Heading>
-          <Text color="brand.lightGray" fontSize="sm">{description}</Text>
-          {features && (
-            <SimpleGrid columns={2} spacing={2} w="full" pt={2}>
-              {features.map((feature, index) => (
-                <HStack key={index} spacing={2}>
-                  <Icon as={FaCheckCircle} color="brand.blue" w={3} h={3} />
-                  <Text color="brand.lightGray" fontSize="xs">{feature}</Text>
-                </HStack>
-              ))}
-            </SimpleGrid>
-          )}
-        </VStack>
-      </HStack>
+        <Icon as={icon} w={{ base: 4, md: 5 }} h={{ base: 4, md: 5 }} color="brand.blue" />
+        <Heading size={{ base: "2xs", md: "xs" }} color="white" fontFamily="heading">{title}</Heading>
+        <Text color="brand.lightGray" fontSize={{ base: "2xs", md: "xs" }}>{description}</Text>
+        {features && (
+          <VStack align="start" spacing={{ base: 1, md: 2 }} w="full" pt={{ base: 1, md: 2 }}>
+            {features.map((feature, index) => (
+              <HStack key={index} spacing={{ base: 1, md: 2 }}>
+                <Icon as={FaCheckCircle} color="brand.blue" w={{ base: 2, md: 3 }} h={{ base: 2, md: 3 }} />
+                <Text color="brand.lightGray" fontSize={{ base: "2xs", md: "xs" }}>{feature}</Text>
+              </HStack>
+            ))}
+          </VStack>
+        )}
+      </VStack>
     </MotionBox>
   )
 }
@@ -362,28 +384,28 @@ const ValueCard = ({ icon, title, description, features }: { icon: any; title: s
 const StatCard = ({ icon, label, value, helpText, trend }: { icon: any; label: string; value: string; helpText: string; trend?: 'up' | 'down' }) => {
   return (
     <MotionBox
-      whileHover={{ y: -5 }}
+      whileHover={{ y: -2 }}
       transition={{ duration: 0.2 }}
     >
       <Box
-        p={4}
-        bg="brand.darkGray"
+        p={{ base: 3, md: 4 }}
+        bg="brand.darkerGray"
         rounded="lg"
         border="1px"
         borderColor="brand.lightGray"
         h="full"
       >
-        <Icon as={icon} w={6} h={6} color="brand.blue" mb={2} />
-        <Text color="brand.lightGray" fontSize="xs" mb={1}>{label}</Text>
-        <Text color="white" fontSize="xl" fontWeight="bold" mb={1}>{value}</Text>
-        <HStack spacing={1}>
+        <Icon as={icon} w={{ base: 4, md: 5 }} h={{ base: 4, md: 5 }} color="brand.blue" mb={{ base: 1, md: 2 }} />
+        <Text color="brand.lightGray" fontSize={{ base: "2xs", md: "xs" }} mb={{ base: 1, md: 2 }}>{label}</Text>
+        <Text color="white" fontSize={{ base: "md", md: "lg" }} fontWeight="bold" mb={{ base: 1, md: 2 }}>{value}</Text>
+        <HStack spacing={{ base: 1, md: 2 }}>
           <Icon 
             as={trend === 'up' ? FaChartLine : FaChartLine} 
             color={trend === 'up' ? 'green.400' : 'red.400'} 
-            w={3} 
-            h={3} 
+            w={{ base: 2, md: 3 }} 
+            h={{ base: 2, md: 3 }} 
           />
-          <Text color={trend === 'up' ? 'green.400' : 'red.400'} fontSize="xs">{helpText}</Text>
+          <Text color={trend === 'up' ? 'green.400' : 'red.400'} fontSize={{ base: "2xs", md: "xs" }}>{helpText}</Text>
         </HStack>
       </Box>
     </MotionBox>
