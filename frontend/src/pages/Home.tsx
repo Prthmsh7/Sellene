@@ -267,19 +267,25 @@ const Home = () => {
                         key={index}
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                        whileHover={{
+                          y: -4,
+                          boxShadow: '0 10px 20px rgba(66, 153, 225, 0.2)',
+                          borderColor: 'brand.blue'
+                        }}
+                        transition={{ 
+                          duration: 0.5, 
+                          delay: index * 0.1,
+                          ease: "easeOut",
+                          hover: {
+                            duration: 0.2
+                          }
+                        }}
                         bg="brand.darkerGray"
                         p={4}
                         borderRadius="xl"
                         borderWidth="1px"
                         borderColor="brand.lightGray"
-                        h="140px"
-                        _hover={{
-                          transform: 'translateY(-4px)',
-                          boxShadow: '0 10px 20px rgba(66, 153, 225, 0.2)',
-                          borderColor: 'brand.blue'
-                        }}
-                        transition="all 0.2s"
+                        h="120px"
                       >
                         <VStack align="start" spacing={2} h="full">
                           <HStack spacing={2}>
