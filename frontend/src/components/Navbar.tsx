@@ -70,7 +70,7 @@ export const Navbar = () => {
   ]
 
   const navItems = [
-    { name: 'Home', path: '/' },
+    { name: 'Dashboard', path: '/dashboard' },
     { name: 'About', path: '/about' },
     { name: 'Marketplace', path: '/marketplace' },
     { name: 'Developers', path: '/developers' },
