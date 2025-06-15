@@ -31,9 +31,12 @@ import {
 } from 'react-icons/fa'
 import AnimatedPage from '../components/AnimatedPage'
 import selleneLogo from '../assets/Sellene-logo-light.png'
+import { TestIPRegistration } from '../components/TestIPRegistration'
+
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
 
-const MotionBox = motion(Box)
+
+const MotionBox = motion.create(Box)
 
 const float = keyframes`
   0% { transform: translateY(0px); }
@@ -353,6 +356,8 @@ const Home = () => {
             </Text>
           </Box>
         </Box>
+
+        <TestIPRegistration />
       </Box>
     </AnimatedPage>
   )
