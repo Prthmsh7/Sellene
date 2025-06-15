@@ -9,388 +9,315 @@ import {
   Icon,
   Button,
   Link,
-  Flex,
-  SimpleGrid,
   Grid,
   GridItem,
+  Flex,
+  Circle,
+  useToken,
 } from '@chakra-ui/react'
 import { keyframes } from '@emotion/react'
-import { motion, useAnimation } from 'framer-motion'
+import { motion } from 'framer-motion'
 import { 
-  FaGithub, 
-  FaTwitter, 
-  FaDiscord, 
-  FaRocket, 
-  FaUsers, 
-  FaChartLine, 
-  FaLock, 
-  FaExchangeAlt,
+  FaArrowRight,
+  FaPalette,
+  FaChartLine,
   FaShieldAlt,
   FaGlobe,
-  FaRobot,
-  FaWallet
+  FaCoins,
+  FaUsers,
+  FaLock
 } from 'react-icons/fa'
-import { useEffect, useRef } from 'react'
 import AnimatedPage from '../components/AnimatedPage'
 import selleneLogo from '../assets/Sellene-logo-light.png'
 
 const MotionBox = motion(Box)
 
-// Animations
 const float = keyframes`
-  0% { transform: translateY(0px) rotate(0deg); }
-  50% { transform: translateY(-20px) rotate(1deg); }
-  100% { transform: translateY(0px) rotate(0deg); }
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
 `
 
-const gradient = keyframes`
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+const pulse = keyframes`
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0.5; }
 `
 
-const glow = keyframes`
-  0% { filter: drop-shadow(0 0 20px rgba(66, 153, 225, 0.3)); }
-  50% { filter: drop-shadow(0 0 30px rgba(66, 153, 225, 0.5)); }
-  100% { filter: drop-shadow(0 0 20px rgba(66, 153, 225, 0.3)); }
+const rotate = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
 `
-
-const slideIn = keyframes`
-  from { transform: translateX(-100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-`
-
-const fadeIn = keyframes`
-  from { opacity: 0; }
-  to { opacity: 1; }
-`
-
-const FeatureCard = ({ icon, title, description, delay }: { 
-  icon: any; 
-  title: string; 
-  description: string;
-  delay: number;
-}) => (
-  <MotionBox
-    initial={{ opacity: 0, y: 20 }}
-    animate={{ opacity: 1, y: 0 }}
-    transition={{ duration: 0.5, delay }}
-    bg="whiteAlpha.50"
-    p={6}
-    borderRadius="xl"
-    backdropFilter="blur(10px)"
-    border="1px"
-    borderColor="whiteAlpha.200"
-    _hover={{ 
-      transform: 'translateY(-5px) scale(1.02)',
-      borderColor: 'brand.blue',
-      boxShadow: '0 10px 30px rgba(66, 153, 225, 0.2)'
-    }}
-    transition="all 0.3s ease"
-    h="full"
-  >
-    <VStack align="start" spacing={4} h="full">
-      <Box 
-        p={3} 
-        borderRadius="lg" 
-        bg="whiteAlpha.100"
-        color="brand.blue"
-      >
-        <Icon as={icon} boxSize={6} />
-      </Box>
-      <Text 
-        fontWeight="bold" 
-        color="white" 
-        fontSize="xl"
-        bgGradient="linear(to-r, brand.blue, brand.purple)"
-        bgClip="text"
-      >
-        {title}
-      </Text>
-      <Text color="brand.lightGray" fontSize="md" lineHeight="tall">
-        {description}
-      </Text>
-    </VStack>
-  </MotionBox>
-)
-
-const StatCard = ({ value, label }: { value: string; label: string }) => (
-  <MotionBox
-    initial={{ opacity: 0, scale: 0.9 }}
-    animate={{ opacity: 1, scale: 1 }}
-    transition={{ duration: 0.5 }}
-    textAlign="center"
-    p={4}
-  >
-    <Text
-      fontSize="3xl"
-      fontWeight="bold"
-      bgGradient="linear(to-r, brand.blue, brand.purple)"
-      bgClip="text"
-      mb={2}
-    >
-      {value}
-    </Text>
-    <Text color="brand.lightGray" fontSize="sm">
-      {label}
-    </Text>
-  </MotionBox>
-)
 
 const Home = () => {
   const bgColor = useColorModeValue('brand.darkGray', 'brand.darkGray')
-  const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
-  const controls = useAnimation()
-
-  const features = [
-    {
-      icon: FaUsers,
-      title: "For Creators",
-      description: "Transform your creative work into tradeable assets. Reach global investors and monetize your intellectual property like never before."
-    },
-    {
-      icon: FaChartLine,
-      title: "For Investors",
-      description: "Access a new class of digital assets. Invest in promising creative works and participate in the future of intellectual property trading."
-    },
-    {
-      icon: FaShieldAlt,
-      title: "Secure & Protected",
-      description: "Advanced blockchain security ensures your assets are protected. Smart contracts guarantee fair trading and ownership rights."
-    },
-    {
-      icon: FaExchangeAlt,
-      title: "Cross-Chain Trading",
-      description: "Trade seamlessly across multiple blockchains. Our platform provides liquidity and accessibility across the entire crypto ecosystem."
-    },
-    {
-      icon: FaRobot,
-      title: "AI-Powered",
-      description: "Leverage cutting-edge AI for asset valuation and market analysis. Make informed decisions with real-time insights and predictions."
-    },
-    {
-      icon: FaWallet,
-      title: "Easy Integration",
-      description: "Connect your existing wallet and start trading. Support for multiple wallets and chains makes it easy to get started."
-    }
-  ]
-
-  const stats = [
-    { value: "100K+", label: "Active Users" },
-    { value: "$50M+", label: "Trading Volume" },
-    { value: "10K+", label: "Assets Listed" },
-    { value: "24/7", label: "Support" }
-  ]
-
-  useEffect(() => {
-    controls.start({
-      opacity: 1,
-      y: 0,
-      transition: { duration: 0.8, ease: "easeOut" }
-    })
-  }, [controls])
+  const [blue, purple] = useToken('colors', ['brand.blue', 'brand.purple'])
 
   return (
     <AnimatedPage>
       <Box 
         bg={bgColor} 
-        minH="100vh"
+        h="100vh"
         position="relative"
         overflow="hidden"
+        style={{ zIndex: 0 }}
       >
-        {/* Animated background gradient */}
+        {/* Animated background elements */}
         <Box
           position="absolute"
-          top="0"
-          left="0"
-          right="0"
-          bottom="0"
-          bgGradient="linear(to-br, brand.darkGray, brand.darkerGray, brand.darkGray)"
-          bgSize="200% 200%"
-          animation={`${gradient} 15s ease infinite`}
-          opacity="0.5"
-          zIndex="0"
+          top="10%"
+          left="5%"
+          w="400px"
+          h="400px"
+          borderRadius="full"
+          bgGradient={`radial(${blue}, ${purple})`}
+          opacity="0.1"
+          filter="blur(40px)"
+          animation={`${float} 8s ease-in-out infinite`}
+        />
+        <Box
+          position="absolute"
+          bottom="10%"
+          right="5%"
+          w="500px"
+          h="500px"
+          borderRadius="full"
+          bgGradient={`radial(${purple}, ${blue})`}
+          opacity="0.1"
+          filter="blur(40px)"
+          animation={`${float} 8s ease-in-out infinite reverse`}
         />
 
-        {/* Hero Section */}
-        <Container maxW="container.xl" position="relative" zIndex="1" pt={20}>
-          <Grid templateColumns={{ base: "1fr", lg: "1fr 1fr" }} gap={12} alignItems="center" minH="80vh">
+        <Container maxW="container.xl" position="relative" zIndex="1" h="100vh" py={4}>
+          <Grid 
+            templateRows="1fr"
+            gap={4}
+            h="full"
+          >
             <GridItem>
-              <VStack align="start" spacing={8}>
-                <MotionBox
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={controls}
-                  animation={`${float} 6s ease-in-out infinite, ${glow} 3s ease-in-out infinite`}
-                >
-                  <Image
-                    src={selleneLogo}
-                    alt="Sellene Logo"
-                    w="300px"
-                    h="auto"
-                    objectFit="contain"
-                    filter="drop-shadow(0 0 20px rgba(66, 153, 225, 0.3))"
-                  />
-                </MotionBox>
-
-                <VStack align="start" spacing={6}>
-                  <Text
-                    fontSize={{ base: "4xl", md: "5xl" }}
-                    fontWeight="bold"
-                    lineHeight="1.2"
-                    bgGradient="linear(to-r, brand.blue, brand.purple, brand.blue)"
-                    bgSize="200% auto"
-                    bgClip="text"
-                    animation={`${gradient} 8s linear infinite`}
-                  >
-                    The Future of Intellectual Property Trading
-                  </Text>
-
-                  <Text
-                    fontSize="xl"
-                    color="brand.lightGray"
-                    maxW="600px"
-                    lineHeight="1.6"
-                  >
-                    Join the revolution in digital asset ownership. Tokenize, trade, and protect your creative work on the blockchain with our cutting-edge platform.
-                  </Text>
-
-                  <HStack spacing={6} pt={4}>
-                    <Button
-                      as={Link}
-                      href="/dashboard"
-                      rightIcon={<FaRocket />}
-                      size="lg"
-                      px={8}
-                      py={6}
-                      fontSize="lg"
-                      fontWeight="bold"
-                      bgGradient="linear(to-r, brand.blue, brand.purple)"
-                      _hover={{
-                        transform: 'translateY(-2px)',
-                        boxShadow: '0 10px 20px rgba(66, 153, 225, 0.3)',
-                        bgGradient: 'linear(to-r, brand.purple, brand.blue)',
-                      }}
-                      transition="all 0.3s ease"
+              <Grid 
+                templateColumns={{ base: "1fr", lg: "1fr 1fr" }} 
+                gap={8} 
+                alignItems="center"
+                h="full"
+              >
+                {/* Left Column - Logo and Main Content */}
+                <GridItem>
+                  <VStack align="center" spacing={4}>
+                    <MotionBox
+                      initial={{ opacity: 0, scale: 0.8 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      transition={{ duration: 0.8 }}
+                      position="relative"
+                      w="full"
+                      display="flex"
+                      justifyContent="center"
+                      mb={2}
                     >
-                      Launch App
-                    </Button>
-                    <HStack spacing={4}>
-                      {[
-                        { icon: FaGithub, href: 'https://github.com', label: 'GitHub' },
-                        { icon: FaTwitter, href: 'https://twitter.com', label: 'Twitter' },
-                        { icon: FaDiscord, href: 'https://discord.com', label: 'Discord' },
-                      ].map((social, index) => (
+                      <Circle
+                        size="500px"
+                        bgGradient={`radial(${blue}, ${purple})`}
+                        opacity="0.1"
+                        position="absolute"
+                        top="50%"
+                        left="50%"
+                        transform="translate(-50%, -50%)"
+                        animation={`${pulse} 4s ease-in-out infinite`}
+                      />
+                      <Image
+                        src={selleneLogo}
+                        alt="Sellene Logo"
+                        w="400px"
+                        h="auto"
+                        objectFit="contain"
+                        filter="drop-shadow(0 0 40px rgba(66, 153, 225, 0.5))"
+                        position="relative"
+                        zIndex="1"
+                      />
+                    </MotionBox>
+
+                    <VStack align="start" spacing={4} w="full">
+                      <Text
+                        fontSize={{ base: "3xl", md: "4xl", lg: "5xl" }}
+                        fontWeight="bold"
+                        lineHeight="1.1"
+                        bgGradient="linear(to-r, brand.blue, brand.purple, brand.blue)"
+                        bgSize="200% auto"
+                        bgClip="text"
+                        animation={`${pulse} 8s linear infinite`}
+                      >
+                        Your Art, Your Value
+                      </Text>
+
+                      <Text
+                        fontSize={{ base: "md", md: "lg" }}
+                        color="brand.lightGray"
+                        maxW="600px"
+                        lineHeight="1.6"
+                      >
+                        Transform your creative works into valuable digital assets. Sell, trade, and earn from your art with our secure blockchain platform.
+                      </Text>
+
+                      <HStack spacing={6} pt={2}>
                         <Button
-                          key={index}
                           as={Link}
-                          href={social.href}
-                          isExternal
-                          variant="ghost"
-                          color="white"
+                          href="/dashboard"
+                          rightIcon={<FaArrowRight />}
                           size="lg"
-                          px={4}
+                          px={8}
+                          py={5}
+                          fontSize="lg"
+                          fontWeight="bold"
+                          bgGradient="linear(to-r, brand.blue, brand.purple)"
                           _hover={{
-                            color: 'brand.blue',
                             transform: 'translateY(-2px)',
-                            bg: 'whiteAlpha.100',
+                            boxShadow: '0 10px 20px rgba(66, 153, 225, 0.3)',
+                            bgGradient: 'linear(to-r, brand.purple, brand.blue)',
                           }}
                           transition="all 0.3s ease"
                         >
-                          <Icon as={social.icon} boxSize={6} />
+                          Start Creating
                         </Button>
-                      ))}
-                    </HStack>
-                  </HStack>
-                </VStack>
-              </VStack>
-            </GridItem>
+                        <Button
+                          as={Link}
+                          href="/about"
+                          variant="outline"
+                          size="lg"
+                          px={8}
+                          py={5}
+                          fontSize="lg"
+                          color="white"
+                          borderColor="whiteAlpha.300"
+                          _hover={{
+                            bg: 'whiteAlpha.100',
+                            borderColor: 'whiteAlpha.500',
+                          }}
+                        >
+                          Learn More
+                        </Button>
+                      </HStack>
+                    </VStack>
+                  </VStack>
+                </GridItem>
 
-            <GridItem display={{ base: "none", lg: "block" }}>
-              <SimpleGrid columns={2} spacing={6}>
-                {features.slice(0, 4).map((feature, index) => (
-                  <FeatureCard key={index} {...feature} delay={index * 0.1} />
-                ))}
-              </SimpleGrid>
+                {/* Right Column - Feature Cards */}
+                <GridItem>
+                  <Grid templateColumns="repeat(2, 1fr)" gap={4}>
+                    {[
+                      {
+                        icon: FaPalette,
+                        title: "Sell Artworks",
+                        description: "List and sell your digital art with secure ownership"
+                      },
+                      {
+                        icon: FaCoins,
+                        title: "Earn Royalties",
+                        description: "Get paid for every resale of your artwork"
+                      },
+                      {
+                        icon: FaUsers,
+                        title: "Global Market",
+                        description: "Connect with art collectors worldwide"
+                      },
+                      {
+                        icon: FaShieldAlt,
+                        title: "Secure Rights",
+                        description: "Protect your intellectual property rights"
+                      }
+                    ].map((feature, index) => (
+                      <MotionBox
+                        key={index}
+                        initial={{ opacity: 0, y: 20 }}
+                        animate={{ opacity: 1, y: 0 }}
+                        transition={{ duration: 0.5, delay: index * 0.1 }}
+                      >
+                        <VStack
+                          align="start"
+                          p={5}
+                          bg="whiteAlpha.50"
+                          borderRadius="2xl"
+                          backdropFilter="blur(10px)"
+                          border="1px"
+                          borderColor="whiteAlpha.200"
+                          h="full"
+                          position="relative"
+                          overflow="hidden"
+                          _hover={{
+                            transform: 'translateY(-4px)',
+                            boxShadow: '0 10px 20px rgba(66, 153, 225, 0.2)',
+                          }}
+                          transition="all 0.3s ease"
+                        >
+                          <Circle
+                            size="40px"
+                            bgGradient="linear(to-br, brand.blue, brand.purple)"
+                            position="absolute"
+                            top="-10px"
+                            right="-10px"
+                            opacity="0.1"
+                          />
+                          <Icon as={feature.icon} boxSize={6} color="brand.blue" />
+                          <Text fontSize="lg" fontWeight="bold" color="white">
+                            {feature.title}
+                          </Text>
+                          <Text fontSize="sm" color="brand.lightGray">
+                            {feature.description}
+                          </Text>
+                        </VStack>
+                      </MotionBox>
+                    ))}
+                  </Grid>
+                </GridItem>
+              </Grid>
             </GridItem>
           </Grid>
-
-          {/* Stats Section */}
-          <Box py={16}>
-            <SimpleGrid columns={{ base: 2, md: 4 }} spacing={8}>
-              {stats.map((stat, index) => (
-                <StatCard key={index} {...stat} />
-              ))}
-            </SimpleGrid>
-          </Box>
-
-          {/* Features Grid */}
-          <Box py={16}>
-            <Text
-              fontSize="3xl"
-              fontWeight="bold"
-              textAlign="center"
-              mb={12}
-              bgGradient="linear(to-r, brand.blue, brand.purple)"
-              bgClip="text"
-            >
-              Why Choose Sellene?
-            </Text>
-            <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={8}>
-              {features.map((feature, index) => (
-                <FeatureCard key={index} {...feature} delay={index * 0.1} />
-              ))}
-            </SimpleGrid>
-          </Box>
         </Container>
 
-        {/* Marquee Section */}
-        <Box 
-          w="full" 
-          bg="brand.darkerGray" 
+        {/* Simple Marquee Footer */}
+        <Box
+          position="fixed"
+          bottom="0"
+          left="0"
+          right="0"
+          bg="blackAlpha.900"
           py={4}
+          zIndex="1000"
           overflow="hidden"
-          borderTop="1px"
-          borderColor={borderColor}
-          position="relative"
-          zIndex="1"
+          whiteSpace="nowrap"
+          width="100%"
         >
-          <Flex
-            position="relative"
-            w="200%"
-            animation={`${slideIn} 30s linear infinite`}
-            _hover={{ animationPlayState: 'paused' }}
+          <Box
+            as="div"
+            animation={`${keyframes`
+              from { transform: translateX(0); }
+              to { transform: translateX(-50%); }
+            `} 35s linear infinite`}
+            display="inline-flex"
+            width="max-content"
           >
-            <Text
-              fontSize="2xl"
-              fontWeight="900"
-              letterSpacing="wider"
-              fontFamily="heading"
+            <Text 
+              color="white" 
+              fontSize="xl" 
+              fontWeight="extrabold" 
+              display="inline-block" 
+              mx={8}
+              letterSpacing="wide"
               textTransform="uppercase"
-              bgGradient="linear(to-r, brand.blue, brand.purple, brand.blue)"
-              bgSize="200% auto"
-              bgClip="text"
-              animation={`${gradient} 8s linear infinite`}
-              filter="drop-shadow(0 0 10px rgba(66, 153, 225, 0.3))"
-              whiteSpace="nowrap"
             >
-              {"Tokenize • Trade • Protect • Innovate • "}
+              TRADE ART • SELL YOUR CREATIONS • BUY UNIQUE PIECES • EARN ROYALTIES • PROTECT YOUR WORK • GLOBAL MARKETPLACE • INSTANT PAYMENTS • SECURE TRANSACTIONS • VERIFIED ARTISTS • EXCLUSIVE COLLECTIONS • DIGITAL GALLERY • ARTIST COMMUNITY • CREATIVE ECONOMY • BLOCKCHAIN ART • FUTURE OF CREATIVITY
             </Text>
-            <Text
-              fontSize="2xl"
-              fontWeight="900"
-              letterSpacing="wider"
-              fontFamily="heading"
+            <Text 
+              color="white" 
+              fontSize="xl" 
+              fontWeight="extrabold" 
+              display="inline-block" 
+              mx={8}
+              letterSpacing="wide"
               textTransform="uppercase"
-              bgGradient="linear(to-r, brand.blue, brand.purple, brand.blue)"
-              bgSize="200% auto"
-              bgClip="text"
-              animation={`${gradient} 8s linear infinite`}
-              filter="drop-shadow(0 0 10px rgba(66, 153, 225, 0.3))"
-              whiteSpace="nowrap"
             >
-              {"Tokenize • Trade • Protect • Innovate • "}
+              TRADE ART • SELL YOUR CREATIONS • BUY UNIQUE PIECES • EARN ROYALTIES • PROTECT YOUR WORK • GLOBAL MARKETPLACE • INSTANT PAYMENTS • SECURE TRANSACTIONS • VERIFIED ARTISTS • EXCLUSIVE COLLECTIONS • DIGITAL GALLERY • ARTIST COMMUNITY • CREATIVE ECONOMY • BLOCKCHAIN ART • FUTURE OF CREATIVITY
             </Text>
-          </Flex>
+          </Box>
         </Box>
       </Box>
     </AnimatedPage>
