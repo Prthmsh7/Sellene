@@ -32,10 +32,23 @@ import {
   NumberIncrementStepper,
   NumberDecrementStepper,
   useToast,
+  Select,
+  InputGroup,
+  InputLeftElement,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  Divider,
+  Tag,
+  TagLabel,
+  TagCloseButton,
+  Wrap,
+  WrapItem,
 } from '@chakra-ui/react'
-import { FaEthereum, FaClock, FaFire, FaChartLine, FaUsers, FaLock, FaShare } from 'react-icons/fa'
+import { FaEthereum, FaClock, FaFire, FaChartLine, FaUsers, FaLock, FaShare, FaFilter, FaSort, FaSearch } from 'react-icons/fa'
 import AnimatedPage from '../components/AnimatedPage'
-import { useState, memo } from 'react'
+import { useState, memo, useMemo } from 'react'
 
 // Memoized Collection Card
 const CollectionCard = memo(({ collection, onOpen, setSelectedCollection }) => {
@@ -211,9 +224,162 @@ const BuySharesModal = ({ isOpen, onClose, collection }) => {
   )
 }
 
+const FilterBar = ({ filters, setFilters, categories }) => {
+  const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray')
+  const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
+
+  const handleCategoryToggle = (category) => {
+    setFilters(prev => ({
+      ...prev,
+      categories: prev.categories.includes(category)
+        ? prev.categories.filter(c => c !== category)
+        : [...prev.categories, category]
+    }))
+  }
+
+  const handlePriceChange = (field, value) => {
+    setFilters(prev => ({
+      ...prev,
+      priceRange: {
+        ...prev.priceRange,
+        [field]: value
+      }
+    }))
+  }
+
+  return (
+    <VStack spacing={4} align="stretch" w="full">
+      <HStack spacing={4} wrap="wrap">
+        <InputGroup maxW="300px">
+          <InputLeftElement pointerEvents="none">
+            <Icon as={FaSearch} color="brand.lightGray" />
+          </InputLeftElement>
+          <Input
+            placeholder="Search collections..."
+            value={filters.search}
+            onChange={(e) => setFilters(prev => ({ ...prev, search: e.target.value }))}
+            bg={bgColor}
+            borderColor={borderColor}
+            color="white"
+            _placeholder={{ color: 'brand.lightGray' }}
+          />
+        </InputGroup>
+
+        <Menu closeOnSelect={false}>
+          <MenuButton
+            as={Button}
+            leftIcon={<FaFilter />}
+            variant="outline"
+            colorScheme="blue"
+          >
+            Filter
+          </MenuButton>
+          <MenuList bg={bgColor} borderColor={borderColor}>
+            <MenuItem
+              onClick={() => setFilters(prev => ({ ...prev, trending: !prev.trending }))}
+              bg={filters.trending ? 'blue.500' : 'transparent'}
+              color={filters.trending ? 'white' : 'brand.lightGray'}
+            >
+              <HStack>
+                <Icon as={FaFire} />
+                <Text>Trending</Text>
+              </HStack>
+            </MenuItem>
+            <Divider borderColor={borderColor} />
+            <MenuItem
+              onClick={() => setFilters(prev => ({ ...prev, new: !prev.new }))}
+              bg={filters.new ? 'blue.500' : 'transparent'}
+              color={filters.new ? 'white' : 'brand.lightGray'}
+            >
+              <HStack>
+                <Icon as={FaClock} />
+                <Text>New</Text>
+              </HStack>
+            </MenuItem>
+          </MenuList>
+        </Menu>
+
+        <Select
+          maxW="200px"
+          value={filters.sortBy}
+          onChange={(e) => setFilters(prev => ({ ...prev, sortBy: e.target.value }))}
+          bg={bgColor}
+          borderColor={borderColor}
+          color="white"
+        >
+          <option value="price_asc">Price: Low to High</option>
+          <option value="price_desc">Price: High to Low</option>
+          <option value="owners_desc">Most Owners</option>
+          <option value="sold_desc">Most Sold</option>
+        </Select>
+
+        <HStack spacing={2}>
+          <NumberInput
+            min={0}
+            max={filters.priceRange.max}
+            value={filters.priceRange.min}
+            onChange={(value) => handlePriceChange('min', value)}
+            maxW="120px"
+          >
+            <NumberInputField
+              placeholder="Min ETH"
+              bg={bgColor}
+              borderColor={borderColor}
+              color="white"
+            />
+          </NumberInput>
+          <Text color="brand.lightGray">to</Text>
+          <NumberInput
+            min={filters.priceRange.min}
+            value={filters.priceRange.max}
+            onChange={(value) => handlePriceChange('max', value)}
+            maxW="120px"
+          >
+            <NumberInputField
+              placeholder="Max ETH"
+              bg={bgColor}
+              borderColor={borderColor}
+              color="white"
+            />
+          </NumberInput>
+        </HStack>
+      </HStack>
+
+      <Wrap spacing={2}>
+        {categories.map((category) => (
+          <WrapItem key={category}>
+            <Tag
+              size="md"
+              borderRadius="full"
+              variant={filters.categories.includes(category) ? "solid" : "outline"}
+              colorScheme="blue"
+              cursor="pointer"
+              onClick={() => handleCategoryToggle(category)}
+            >
+              <TagLabel>{category}</TagLabel>
+              {filters.categories.includes(category) && <TagCloseButton />}
+            </Tag>
+          </WrapItem>
+        ))}
+      </Wrap>
+    </VStack>
+  )
+}
+
 const Marketplace = () => {
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [selectedCollection, setSelectedCollection] = useState(null)
+  const [filters, setFilters] = useState({
+    search: '',
+    trending: false,
+    new: false,
+    sortBy: 'price_asc',
+    priceRange: {
+      min: 0,
+      max: 2
+    },
+    categories: []
+  })
 
   // Dummy data for collections
   const collections = [
@@ -318,6 +484,58 @@ const Marketplace = () => {
     }
   ]
 
+  // Get unique categories
+  const categories = useMemo(() => {
+    return [...new Set(collections.map(collection => collection.category))]
+  }, [collections])
+
+  // Filter and sort collections
+  const filteredCollections = useMemo(() => {
+    return collections
+      .filter(collection => {
+        // Search filter
+        if (filters.search && !collection.title.toLowerCase().includes(filters.search.toLowerCase())) {
+          return false
+        }
+
+        // Category filter
+        if (filters.categories.length > 0 && !filters.categories.includes(collection.category)) {
+          return false
+        }
+
+        // Price range filter
+        if (collection.price < filters.priceRange.min || collection.price > filters.priceRange.max) {
+          return false
+        }
+
+        // Trending filter (example: collections with more than 50% sold)
+        if (filters.trending && (collection.sold / collection.total) < 0.5) {
+          return false
+        }
+
+        // New filter (example: collections with less than 30% sold)
+        if (filters.new && (collection.sold / collection.total) > 0.3) {
+          return false
+        }
+
+        return true
+      })
+      .sort((a, b) => {
+        switch (filters.sortBy) {
+          case 'price_asc':
+            return a.price - b.price
+          case 'price_desc':
+            return b.price - a.price
+          case 'owners_desc':
+            return b.owners - a.owners
+          case 'sold_desc':
+            return b.sold - a.sold
+          default:
+            return 0
+        }
+      })
+  }, [collections, filters])
+
   return (
     <AnimatedPage>
       <Box minH="100vh" bg="brand.darkGray" pt="80px">
@@ -331,11 +549,23 @@ const Marketplace = () => {
               </Text>
             </VStack>
 
+            {/* Filters */}
+            <FilterBar 
+              filters={filters} 
+              setFilters={setFilters} 
+              categories={categories}
+            />
+
             {/* Featured Collections */}
             <VStack spacing={6} align="stretch">
-              <Heading size="lg" color="white">Featured Collections</Heading>
+              <HStack justify="space-between">
+                <Heading size="lg" color="white">Featured Collections</Heading>
+                <Text color="brand.lightGray">
+                  Showing {filteredCollections.length} of {collections.length} collections
+                </Text>
+              </HStack>
               <SimpleGrid columns={{ base: 1, md: 2, lg: 3 }} spacing={6}>
-                {collections.map((collection) => (
+                {filteredCollections.map((collection) => (
                   <CollectionCard 
                     key={collection.id} 
                     collection={collection} 
