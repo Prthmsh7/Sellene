@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState } from 'react';
 import { useAuth } from './AuthContext';
-import { useContractWrite, useContractRead, useWaitForTransaction } from 'wagmi';
+import { useContractWrite, useContractRead } from 'wagmi';
+import { useWatchContractEvent } from 'wagmi';
 import { parseEther } from 'viem';
 
 // DeBridge contract addresses (example - replace with actual addresses)
@@ -19,9 +20,10 @@ export function DeBridgeProvider({ children }: { children: React.ReactNode }) {
   const { address } = useAuth();
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [transactionHash, setTransactionHash] = useState<string | null>(null);
 
   // Contract write for sending tokens cross-chain
-  const { data: sendData, write: sendCrossChain } = useContractWrite({
+  const { data: sendData, write: sendCrossChain, isPending } = useContractWrite({
     address: DEBRIDGE_HANDLER_ADDRESS,
     abi: [
       {
@@ -36,12 +38,31 @@ export function DeBridgeProvider({ children }: { children: React.ReactNode }) {
         outputs: []
       }
     ],
-    functionName: 'sendCrossChain'
+    functionName: 'sendCrossChain',
+    onSuccess: (data) => {
+      setTransactionHash(data.hash);
+    }
   });
 
-  // Wait for transaction
-  const { isLoading: isTransactionLoading } = useWaitForTransaction({
-    hash: sendData?.hash
+  // Watch for transaction completion
+  useWatchContractEvent({
+    address: DEBRIDGE_HANDLER_ADDRESS,
+    abi: [
+      {
+        name: 'CrossChainTransfer',
+        type: 'event',
+        inputs: [
+          { name: 'sender', type: 'address', indexed: true },
+          { name: 'receiver', type: 'address', indexed: true },
+          { name: 'amount', type: 'uint256' },
+          { name: 'targetChainId', type: 'uint256' }
+        ]
+      }
+    ],
+    eventName: 'CrossChainTransfer',
+    onLogs: () => {
+      setTransactionHash(null);
+    }
   });
 
   const sendTokens = async (
@@ -77,7 +98,7 @@ export function DeBridgeProvider({ children }: { children: React.ReactNode }) {
   };
 
   const value = {
-    loading: loading || isTransactionLoading,
+    loading: loading || isPending || !!transactionHash,
     error,
     sendTokens,
     CHAIN_IDS
