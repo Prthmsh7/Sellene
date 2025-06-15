@@ -16,6 +16,8 @@ import {
   useToast,
   Grid,
   GridItem,
+  Circle,
+  useToken,
 } from '@chakra-ui/react'
 import { FaRocket, FaUsers, FaCoins, FaChartLine, FaHandshake, FaLock, FaGlobe, FaShieldAlt, FaPalette, FaLightbulb, FaCheckCircle } from 'react-icons/fa'
 import { Link as RouterLink, useNavigate } from 'react-router-dom'
@@ -25,19 +27,37 @@ import { keyframes } from '@emotion/react'
 
 const MotionBox = motion(Box)
 
+const float = keyframes`
+  0% { transform: translateY(0px); }
+  50% { transform: translateY(-20px); }
+  100% { transform: translateY(0px); }
+`
+
+const pulse = keyframes`
+  0% { transform: scale(1); opacity: 0.5; }
+  50% { transform: scale(1.1); opacity: 0.8; }
+  100% { transform: scale(1); opacity: 0.5; }
+`
+
+const rotate = keyframes`
+  from { transform: rotate(0deg); }
+  to { transform: rotate(360deg); }
+`
+
 const About = () => {
-  const bgColor = useColorModeValue('brand.darkerGray', 'brand.darkerGray')
+  const bgColor = useColorModeValue('brand.darkGray', 'brand.darkGray')
   const borderColor = useColorModeValue('brand.lightGray', 'brand.lightGray')
   const isMobile = useBreakpointValue({ base: true, md: false })
   const navigate = useNavigate()
   const toast = useToast()
+  const [blue, purple] = useToken('colors', ['brand.blue', 'brand.purple'])
 
   const handleArtistClick = async () => {
     try {
       // TODO: Implement wallet connection
       toast({
-        title: "Coming Soon",
-        description: "Wallet connection will be available soon!",
+        title: "Connect Wallet",
+        description: "Please connect your wallet to join as an artist",
         status: "info",
         duration: 5000,
         isClosable: true,
@@ -61,11 +81,39 @@ const About = () => {
     <AnimatedPage>
       <Box 
         minH="100vh" 
-        bg="brand.darkGray" 
+        bg={bgColor} 
         pt={{ base: "100px", md: "120px", lg: "140px" }} 
         pb={{ base: 4, md: 6, lg: 8 }}
         position="relative"
+        overflow="hidden"
+        style={{ zIndex: 0 }}
       >
+        {/* Animated background elements */}
+        <Box
+          position="absolute"
+          top="10%"
+          left="5%"
+          w="400px"
+          h="400px"
+          borderRadius="full"
+          bgGradient={`radial(${blue}, ${purple})`}
+          opacity="0.1"
+          filter="blur(40px)"
+          animation={`${float} 8s ease-in-out infinite`}
+        />
+        <Box
+          position="absolute"
+          bottom="10%"
+          right="5%"
+          w="500px"
+          h="500px"
+          borderRadius="full"
+          bgGradient={`radial(${purple}, ${blue})`}
+          opacity="0.1"
+          filter="blur(40px)"
+          animation={`${float} 8s ease-in-out infinite reverse`}
+        />
+
         <Container maxW="container.xl" h="full">
           <Grid
             templateColumns={{ base: "1fr", lg: "repeat(2, 1fr)" }}
