@@ -30,6 +30,7 @@ import { useState, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@tomo-inc/tomo-evm-kit'
 import selleneLogo from '../assets/Sellene-logo-light.png'
+import { DeBridgeTest } from '../components/DeBridgeTest'
 
 export const Navbar = () => {
   const location = useLocation()
@@ -69,12 +70,11 @@ export const Navbar = () => {
   ]
 
   const navItems = [
-    { name: 'Dashboard', path: '/dashboard' },
-    { name: 'Creators Studio', path: '/studio' },
-    { name: 'Gallery', path: '/gallery' },
+    { name: 'Home', path: '/' },
+    { name: 'About', path: '/about' },
     { name: 'Marketplace', path: '/marketplace' },
     { name: 'Developers', path: '/developers' },
-    { name: 'About', path: '/about' },
+    { name: 'DeBridge Test', path: '/debridge-test' },
   ]
 
   const isActive = (path: string) => {

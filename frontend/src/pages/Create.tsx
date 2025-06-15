@@ -1,7 +1,6 @@
 import { Box, Container, Heading, Text, VStack } from '@chakra-ui/react';
 import { StoryIPRegistration } from '../components/StoryIPRegistration';
 import { CrossChainTransfer } from '../components/CrossChainTransfer';
-import { DeBridgeTest } from '../components/DeBridgeTest';
 import { useAuth } from '../contexts/AuthContext';
 
 export default function Create() {
@@ -29,11 +28,6 @@ export default function Create() {
         <Box w="full">
           <Heading size="lg" mb={6}>Cross-Chain Transfer</Heading>
           <CrossChainTransfer />
-        </Box>
-
-        <Box w="full">
-          <Heading size="lg" mb={6}>DeBridge Integration Test</Heading>
-          <DeBridgeTest />
         </Box>
       </VStack>
     </Container>
