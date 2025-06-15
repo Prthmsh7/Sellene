@@ -10,7 +10,7 @@
 
 2. **AI Agents**  
    Build AI-driven autonomous agents that exchange, license, or creatively leverage IP using Story's ATCP/IP infrastructure.
-
+   
 3. **Creative Front-End / UX**  
    Create intuitive, aesthetic, and user-friendly front-ends for popular open-source generative media tools—seamlessly integrated with the Story SDK and IP registration flows.
 
