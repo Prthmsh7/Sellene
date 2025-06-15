@@ -30,7 +30,6 @@ import { useState, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@tomo-inc/tomo-evm-kit'
 import selleneLogo from '../assets/Sellene-logo-light.png'
-import { motion, AnimatePresence } from 'framer-motion'
 
 export const Navbar = () => {
   const location = useLocation()
@@ -43,7 +42,6 @@ export const Navbar = () => {
   const { address } = useAccount()
   const { openConnectModal } = useConnectModal()
   const [loading, setLoading] = useState(false)
-  const [isNavigating, setIsNavigating] = useState(false)
 
   // Mock search results - replace with actual API call
   const searchResults = [
@@ -72,6 +70,8 @@ export const Navbar = () => {
 
   const navItems = [
     { name: 'Dashboard', path: '/dashboard' },
+    { name: 'Creators Studio', path: '/studio' },
+    { name: 'Gallery', path: '/gallery' },
     { name: 'Marketplace', path: '/marketplace' },
     { name: 'Developers', path: '/developers' },
     { name: 'About', path: '/about' },
@@ -108,11 +108,6 @@ export const Navbar = () => {
   }
 
   const displayAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Connect'
-
-  const handleNavigation = (path: string) => {
-    setIsNavigating(true)
-    setTimeout(() => setIsNavigating(false), 300)
-  }
 
   return (
     <Box
@@ -251,40 +246,14 @@ export const Navbar = () => {
               display={{ base: 'none', lg: 'flex' }}
             >
               {navItems.map((item) => (
-                <RouterLink 
-                  key={item.path} 
-                  to={item.path}
-                  onClick={() => handleNavigation(item.path)}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.05 }}
-                    whileTap={{ scale: 0.95 }}
-                    transition={{ duration: 0.2 }}
+                <RouterLink key={item.path} to={item.path}>
+                  <Text
+                    color={isActive(item.path) ? 'white' : 'brand.lightGray'}
+                    fontWeight={isActive(item.path) ? 'bold' : 'normal'}
+                    _hover={{ color: 'white' }}
                   >
-                    <Text
-                      color={isActive(item.path) ? 'white' : 'brand.lightGray'}
-                      fontWeight={isActive(item.path) ? 'bold' : 'normal'}
-                      _hover={{ color: 'white' }}
-                      position="relative"
-                    >
-                      {item.name}
-                      {isActive(item.path) && (
-                        <motion.div
-                          layoutId="activeNavItem"
-                          style={{
-                            position: 'absolute',
-                            bottom: '-4px',
-                            left: 0,
-                            right: 0,
-                            height: '2px',
-                            background: 'white',
-                            borderRadius: '2px',
-                          }}
-                          transition={{ duration: 0.2 }}
-                        />
-                      )}
-                    </Text>
-                  </motion.div>
+                    {item.name}
+                  </Text>
                 </RouterLink>
               ))}
             </HStack>
@@ -325,28 +294,14 @@ export const Navbar = () => {
           <DrawerBody>
             <VStack spacing={4} align="stretch">
               {navItems.map((item) => (
-                <RouterLink 
-                  key={item.path} 
-                  to={item.path} 
-                  onClick={() => {
-                    handleNavigation(item.path)
-                    onClose()
-                  }}
-                >
-                  <motion.div
-                    whileHover={{ scale: 1.02 }}
-                    whileTap={{ scale: 0.98 }}
-                    transition={{ duration: 0.2 }}
+                <RouterLink key={item.path} to={item.path} onClick={onClose}>
+                  <Text
+                    color={isActive(item.path) ? 'white' : 'brand.lightGray'}
+                    fontWeight={isActive(item.path) ? 'bold' : 'normal'}
+                    _hover={{ color: 'white' }}
                   >
-                    <Text
-                      color={isActive(item.path) ? 'white' : 'brand.lightGray'}
-                      fontWeight={isActive(item.path) ? 'bold' : 'normal'}
-                      _hover={{ color: 'white' }}
-                      py={2}
-                    >
-                      {item.name}
-                    </Text>
-                  </motion.div>
+                    {item.name}
+                  </Text>
                 </RouterLink>
               ))}
             </VStack>

@@ -1,7 +1,5 @@
 import { ChakraProvider } from '@chakra-ui/react'
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom'
-import { AnimatePresence } from 'framer-motion'
-import { PageTransition } from './components/PageTransition'
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom'
 import theme from './theme'
 import { Navbar } from './components/Navbar'
 import Home from './pages/Home'
@@ -12,8 +10,10 @@ import Geography from './pages/Geography'
 import Monthly from './pages/Monthly'
 import Breakdown from './pages/Breakdown'
 import Daily from './pages/Daily'
+import Gallery from './pages/Gallery'
 import Marketplace from './pages/Marketplace'
 import Developers from './pages/Developers'
+import Studio from './pages/Studio'
 import Profile from './pages/Profile'
 import { AuthProvider } from './contexts/AuthContext'
 import { StoryProvider } from './contexts/StoryContext'
@@ -23,6 +23,7 @@ import { DeBridgeProvider } from './contexts/DeBridgeContext'
 import { Toaster } from 'react-hot-toast'
 import { WagmiConfig } from 'wagmi'
 import { config } from './config/wagmi'
+import { DeBridgeTest } from './components/DeBridgeTest'
 
 // Configure React Router future flags
 const router = {
@@ -30,37 +31,6 @@ const router = {
     v7_startTransition: true,
     v7_relativeSplatPath: true
   }
-}
-
-function AppRoutes() {
-  const location = useLocation()
-  
-  return (
-    <AnimatePresence mode="wait">
-      <Routes location={location} key={location.pathname}>
-        {/* Public Routes */}
-        <Route path="/" element={<PageTransition><Home /></PageTransition>} />
-        <Route path="/about" element={<PageTransition><About /></PageTransition>} />
-        <Route path="/marketplace" element={<PageTransition><Marketplace /></PageTransition>} />
-        <Route path="/developers" element={<PageTransition><Developers /></PageTransition>} />
-        <Route path="/profile" element={<PageTransition><Profile /></PageTransition>} />
-        <Route path="/register-ip" element={<PageTransition><StoryIPRegistration /></PageTransition>} />
-        <Route path="/auth" element={<PageTransition><SecureAuth /></PageTransition>} />
-
-        {/* Dashboard Routes */}
-        <Route path="/dashboard" element={<DashboardLayout />}>
-          <Route index element={<PageTransition><Overview /></PageTransition>} />
-          <Route path="geography" element={<PageTransition><Geography /></PageTransition>} />
-          <Route path="monthly" element={<PageTransition><Monthly /></PageTransition>} />
-          <Route path="breakdown" element={<PageTransition><Breakdown /></PageTransition>} />
-          <Route path="daily" element={<PageTransition><Daily /></PageTransition>} />
-        </Route>
-
-        {/* Redirects */}
-        <Route path="*" element={<Navigate to="/" replace />} />
-      </Routes>
-    </AnimatePresence>
-  )
 }
 
 function App() {
@@ -74,9 +44,33 @@ function App() {
                 <div className="min-h-screen bg-gradient-to-br from-purple-900 via-indigo-900 to-blue-900">
                   <Navbar />
                   <main className="container mx-auto px-4 py-8">
-                    <AppRoutes />
+                    <Routes>
+                      {/* Public Routes */}
+                      <Route path="/" element={<Home />} />
+                      <Route path="/about" element={<About />} />
+                      <Route path="/gallery" element={<Gallery />} />
+                      <Route path="/marketplace" element={<Marketplace />} />
+                      <Route path="/developers" element={<Developers />} />
+                      <Route path="/studio" element={<Studio />} />
+                      <Route path="/profile" element={<Profile />} />
+                      <Route path="/register-ip" element={<StoryIPRegistration />} />
+                      <Route path="/auth" element={<SecureAuth />} />
+
+                      {/* Dashboard Routes */}
+                      <Route path="/dashboard" element={<DashboardLayout />}>
+                        <Route index element={<Overview />} />
+                        <Route path="geography" element={<Geography />} />
+                        <Route path="monthly" element={<Monthly />} />
+                        <Route path="breakdown" element={<Breakdown />} />
+                        <Route path="daily" element={<Daily />} />
+                      </Route>
+
+                      {/* Redirects */}
+                      <Route path="*" element={<Navigate to="/" replace />} />
+                    </Routes>
                   </main>
                   <Toaster position="top-right" />
+                  <DeBridgeTest />
                 </div>
               </Router>
             </DeBridgeProvider>

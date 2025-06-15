@@ -35,13 +35,18 @@ class ErrorBoundary extends React.Component<{ children: React.ReactNode }> {
   }
 }
 
-// Initialize Tomo SDK config
+// Initialize Tomo SDK config with updated settings
 const config = getDefaultConfig({
   clientId: TOMO_CONFIG.clientId,
   appName: TOMO_CONFIG.metadata.name,
   projectId: TOMO_CONFIG.projectId,
   chains: [mainnet, polygon, optimism, arbitrum, base],
   ssr: false,
+  enableWalletConnect: true,
+  enableInjected: true,
+  enableCoinbase: true,
+  enableMetaMask: true,
+  autoConnect: false
 });
 
 const queryClient = new QueryClient({
@@ -68,7 +73,12 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
                 mode: 'light',
                 accentColor: '#0066cc',
                 borderRadius: 'medium'
-              }
+              },
+              enableWalletConnect: true,
+              enableInjected: true,
+              enableCoinbase: true,
+              enableMetaMask: true,
+              autoConnect: false
             }}
           >
             <App />

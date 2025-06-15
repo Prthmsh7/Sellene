@@ -1,87 +1,60 @@
 import React, { useState } from 'react';
 import { useDeBridge } from '../contexts/DeBridgeContext';
+import { useAuth } from '../contexts/AuthContext';
 import {
   Box,
   Button,
+  FormControl,
+  FormLabel,
+  Input,
+  Select,
   VStack,
   Text,
   useToast,
-  Code,
-  Divider
+  Heading,
 } from '@chakra-ui/react';
 
 export function DeBridgeTest() {
-  const { loading, error, sendTokens, CHAIN_IDS } = useDeBridge();
-  const [testResults, setTestResults] = useState<string[]>([]);
+  const { sendTokens, loading, error, CHAIN_IDS } = useDeBridge();
+  const { address } = useAuth();
+  const [amount, setAmount] = useState('');
+  const [targetChain, setTargetChain] = useState('');
   const toast = useToast();
 
-  const addTestResult = (result: string) => {
-    setTestResults(prev => [...prev, `${new Date().toISOString()}: ${result}`]);
-  };
+  const handleTransfer = async () => {
+    if (!address) {
+      toast({
+        title: 'Error',
+        description: 'Please connect your wallet first',
+        status: 'error',
+        duration: 5000,
+        isClosable: true,
+      });
+      return;
+    }
 
-  const runTests = async () => {
-    setTestResults([]);
-    
     try {
-      // Test 1: Contract Configuration
-      addTestResult('Testing contract configuration...');
-      if (CHAIN_IDS) {
-        addTestResult('✅ Chain IDs configured correctly');
-      } else {
-        addTestResult('❌ Chain IDs not configured');
-      }
-
-      // Test 2: Send to Ethereum
-      addTestResult('Testing transfer to Ethereum...');
-      try {
-        await sendTokens(
-          '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-          '0.01',
-          CHAIN_IDS.ETHEREUM
-        );
-        addTestResult('✅ Transfer to Ethereum successful');
-      } catch (err) {
-        addTestResult(`❌ Transfer to Ethereum failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      }
-
-      // Test 3: Send to TomoChain
-      addTestResult('Testing transfer to TomoChain...');
-      try {
-        await sendTokens(
-          '0x742d35Cc6634C0532925a3b844Bc454e4438f44e',
-          '0.01',
-          CHAIN_IDS.TOMO
-        );
-        addTestResult('✅ Transfer to TomoChain successful');
-      } catch (err) {
-        addTestResult(`❌ Transfer to TomoChain failed: ${err instanceof Error ? err.message : 'Unknown error'}`);
-      }
-
-      // Test 4: Error Handling
-      addTestResult('Testing error handling...');
-      try {
-        await sendTokens(
-          '0xinvalid',
-          '0.01',
-          CHAIN_IDS.ETHEREUM
-        );
-        addTestResult('❌ Should have failed with invalid address');
-      } catch (err) {
-        addTestResult('✅ Properly handled invalid address');
-      }
+      // Convert chain ID to bigint
+      const chainId = BigInt(targetChain);
+      
+      // Send tokens
+      await sendTokens(
+        address as `0x${string}`,
+        amount,
+        chainId
+      );
 
       toast({
-        title: 'Tests Completed',
-        description: 'Check the test results below',
+        title: 'Success',
+        description: 'Transfer initiated successfully!',
         status: 'success',
         duration: 5000,
         isClosable: true,
       });
-
     } catch (err) {
       toast({
-        title: 'Test Error',
-        description: err instanceof Error ? err.message : 'Unknown error occurred',
+        title: 'Error',
+        description: err instanceof Error ? err.message : 'Transfer failed',
         status: 'error',
         duration: 5000,
         isClosable: true,
@@ -90,33 +63,48 @@ export function DeBridgeTest() {
   };
 
   return (
-    <Box p={4} borderWidth="1px" borderRadius="lg">
+    <Box p={5} shadow="md" borderWidth="1px" borderRadius="md">
       <VStack spacing={4} align="stretch">
-        <Text fontSize="xl" fontWeight="bold">DeBridge Integration Test</Text>
+        <Heading size="md">Test DeBridge Integration</Heading>
         
+        <FormControl>
+          <FormLabel>Amount (ETH)</FormLabel>
+          <Input
+            type="number"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            placeholder="Enter amount"
+          />
+        </FormControl>
+
+        <FormControl>
+          <FormLabel>Target Chain</FormLabel>
+          <Select
+            value={targetChain}
+            onChange={(e) => setTargetChain(e.target.value)}
+            placeholder="Select target chain"
+          >
+            <option value={CHAIN_IDS.ETHEREUM.toString()}>Ethereum</option>
+            <option value={CHAIN_IDS.POLYGON.toString()}>Polygon</option>
+            <option value={CHAIN_IDS.BSC.toString()}>BSC</option>
+            <option value={CHAIN_IDS.TOMO.toString()}>TomoChain</option>
+          </Select>
+        </FormControl>
+
         <Button
-          colorScheme="purple"
-          onClick={runTests}
+          colorScheme="blue"
+          onClick={handleTransfer}
           isLoading={loading}
-          loadingText="Running Tests..."
+          loadingText="Processing..."
         >
-          Run Tests
+          Send Tokens
         </Button>
 
         {error && (
-          <Text color="red.500">Error: {error}</Text>
+          <Text color="red.500">
+            Error: {error}
+          </Text>
         )}
-
-        <Divider />
-
-        <Box>
-          <Text fontWeight="bold" mb={2}>Test Results:</Text>
-          <Code p={4} borderRadius="md" display="block" whiteSpace="pre-wrap">
-            {testResults.length > 0
-              ? testResults.join('\n')
-              : 'No tests run yet'}
-          </Code>
-        </Box>
       </VStack>
     </Box>
   );
