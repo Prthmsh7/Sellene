@@ -23,9 +23,14 @@ import {
   Container,
   Image,
   Icon,
+  Menu,
+  MenuButton,
+  MenuList,
+  MenuItem,
+  MenuDivider,
 } from '@chakra-ui/react'
 import { Link as RouterLink, useLocation } from 'react-router-dom'
-import { FaSearch, FaBars, FaUserCircle, FaTimes } from 'react-icons/fa'
+import { FaSearch, FaBars, FaUserCircle, FaTimes, FaUser, FaCog, FaSignOutAlt } from 'react-icons/fa'
 import { useState, useRef } from 'react'
 import { useAccount } from 'wagmi'
 import { useConnectModal } from '@tomo-inc/tomo-evm-kit'
@@ -108,6 +113,49 @@ export const Navbar = () => {
   }
 
   const displayAddress = address ? `${address.slice(0, 6)}...${address.slice(-4)}` : 'Connect'
+
+  // Dummy profile data
+  const profileData = {
+    name: 'John Doe',
+    avatar: 'https://bit.ly/dan-abramov',
+    balance: '2.5 ETH',
+    collections: 3,
+    followers: 128,
+    following: 45,
+    bio: 'Digital artist and NFT enthusiast',
+    joinedDate: 'March 2023',
+    recentActivity: [
+      {
+        type: 'mint',
+        title: 'Neural Dreams #42',
+        timestamp: '2 hours ago',
+        value: '0.5 ETH'
+      },
+      {
+        type: 'sale',
+        title: 'Digital Sunset',
+        timestamp: '1 day ago',
+        value: '1.2 ETH'
+      },
+      {
+        type: 'purchase',
+        title: 'Cosmic Waves',
+        timestamp: '3 days ago',
+        value: '0.8 ETH'
+      }
+    ],
+    stats: {
+      totalSales: '12.5 ETH',
+      totalPurchases: '8.3 ETH',
+      itemsCreated: 15,
+      itemsSold: 8
+    },
+    badges: [
+      { name: 'Early Adopter', color: 'green' },
+      { name: 'Top Creator', color: 'purple' },
+      { name: 'Verified', color: 'blue' }
+    ]
+  }
 
   return (
     <Box
@@ -258,26 +306,166 @@ export const Navbar = () => {
               ))}
             </HStack>
 
-            {/* Auth Button */}
-            <Button
-              onClick={handleAuth}
-              isLoading={loading}
-              leftIcon={<Icon as={FaUserCircle} />}
-              variant="outline"
-              colorScheme="blue"
-              size="md"
-            >
-              {displayAddress}
-            </Button>
+            {/* Profile Section - Always visible */}
+            <Menu>
+              <MenuButton
+                as={Button}
+                variant="ghost"
+                _hover={{ bg: 'brand.darkerGray' }}
+                _active={{ bg: 'brand.darkerGray' }}
+              >
+                <HStack spacing={2}>
+                  <Avatar size="sm" src={address ? profileData.avatar : 'https://bit.ly/broken-link'} />
+                  <Text 
+                    color={address ? "white" : "brand.blue"} 
+                    display={{ base: 'none', md: 'block' }}
+                    fontWeight={address ? "normal" : "bold"}
+                  >
+                    {address ? profileData.name : 'Connect'}
+                  </Text>
+                </HStack>
+              </MenuButton>
+              <MenuList bg={bgColor} borderColor={borderColor}>
+                {address ? (
+                  <>
+                    <Box p={3}>
+                      <VStack align="start" spacing={2}>
+                        <HStack spacing={2}>
+                          <Text color="white" fontWeight="bold">
+                            {profileData.name}
+                          </Text>
+                          {profileData.badges.map((badge, index) => (
+                            <Badge key={index} colorScheme={badge.color} fontSize="xs">
+                              {badge.name}
+                            </Badge>
+                          ))}
+                        </HStack>
+                        <Text color="brand.lightGray" fontSize="sm">
+                          {address.slice(0, 6)}...{address.slice(-4)}
+                        </Text>
+                        <Text color="brand.lightGray" fontSize="sm">
+                          {profileData.bio}
+                        </Text>
+                        <Text color="brand.lightGray" fontSize="xs">
+                          Joined {profileData.joinedDate}
+                        </Text>
+                        <HStack spacing={4} pt={2}>
+                          <VStack align="start" spacing={0}>
+                            <Text color="white" fontSize="sm" fontWeight="bold">
+                              {profileData.balance}
+                            </Text>
+                            <Text color="brand.lightGray" fontSize="xs">
+                              Balance
+                            </Text>
+                          </VStack>
+                          <VStack align="start" spacing={0}>
+                            <Text color="white" fontSize="sm" fontWeight="bold">
+                              {profileData.collections}
+                            </Text>
+                            <Text color="brand.lightGray" fontSize="xs">
+                              Collections
+                            </Text>
+                          </VStack>
+                          <VStack align="start" spacing={0}>
+                            <Text color="white" fontSize="sm" fontWeight="bold">
+                              {profileData.followers}
+                            </Text>
+                            <Text color="brand.lightGray" fontSize="xs">
+                              Followers
+                            </Text>
+                          </VStack>
+                        </HStack>
+                        <Box w="full" pt={2}>
+                          <Text color="white" fontSize="sm" fontWeight="bold" mb={2}>
+                            Recent Activity
+                          </Text>
+                          <VStack align="start" spacing={2}>
+                            {profileData.recentActivity.map((activity, index) => (
+                              <HStack key={index} spacing={2} w="full">
+                                <Badge
+                                  colorScheme={
+                                    activity.type === 'mint'
+                                      ? 'green'
+                                      : activity.type === 'sale'
+                                      ? 'blue'
+                                      : 'purple'
+                                  }
+                                  fontSize="xs"
+                                >
+                                  {activity.type}
+                                </Badge>
+                                <Text color="white" fontSize="xs" flex={1}>
+                                  {activity.title}
+                                </Text>
+                                <Text color="brand.lightGray" fontSize="xs">
+                                  {activity.value}
+                                </Text>
+                              </HStack>
+                            ))}
+                          </VStack>
+                        </Box>
+                      </VStack>
+                    </Box>
+                    <MenuDivider borderColor={borderColor} />
+                    <MenuItem
+                      icon={<FaUser />}
+                      _hover={{ bg: 'brand.darkerGray' }}
+                      color="white"
+                    >
+                      View Profile
+                    </MenuItem>
+                    <MenuItem
+                      icon={<FaCog />}
+                      _hover={{ bg: 'brand.darkerGray' }}
+                      color="white"
+                    >
+                      Settings
+                    </MenuItem>
+                    <MenuDivider borderColor={borderColor} />
+                    <MenuItem
+                      icon={<FaSignOutAlt />}
+                      _hover={{ bg: 'brand.darkerGray' }}
+                      color="white"
+                    >
+                      Disconnect
+                    </MenuItem>
+                  </>
+                ) : (
+                  <>
+                    <Box p={3}>
+                      <VStack align="start" spacing={2}>
+                        <Text color="white" fontWeight="bold">
+                          Welcome to Sellene
+                        </Text>
+                        <Text color="brand.lightGray" fontSize="sm">
+                          Connect your wallet to access all features
+                        </Text>
+                      </VStack>
+                    </Box>
+                    <MenuDivider borderColor={borderColor} />
+                    <MenuItem
+                      onClick={handleAuth}
+                      icon={<FaUser />}
+                      _hover={{ bg: 'brand.darkerGray' }}
+                      color="brand.blue"
+                      fontWeight="bold"
+                    >
+                      Connect Wallet
+                    </MenuItem>
+                  </>
+                )}
+              </MenuList>
+            </Menu>
 
             {/* Mobile Menu Button */}
             <Button
               display={{ base: 'flex', lg: 'none' }}
               variant="ghost"
               onClick={onOpen}
-              p={0}
+              _hover={{ bg: 'brand.darkerGray' }}
+              _active={{ bg: 'brand.darkerGray' }}
             >
-              <Icon as={FaBars} boxSize={6} color="white" />
+              <FaBars color="white" />
             </Button>
           </HStack>
         </Flex>
